@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EconoFácil - Compare preços, economize em suas compras e planeje receitas inteligentes">
+    <title>EconoFácil - Economize em suas compras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #4CAF50;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --bg-light: #FAFAFA;
+            --white: #FFFFFF;
+            --border-color: #E0E0E0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            box-shadow: var(--shadow);
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .search-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .suggestion-item:hover {
+            background-color: var(--bg-light);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.625rem 1.5rem;
+            border: none;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .user-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            box-shadow: var(--shadow);
+            min-width: 200px;
+            display: none;
+        }
+
+        .user-menu.active {
+            display: block;
+        }
+
+        .user-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .user-menu a:hover {
+            background-color: var(--bg-light);
+        }
+
+        /* Cart Icon */
+        .cart-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.5rem;
+        }
+
+        .cart-icon:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--secondary-color);
+            color: var(--white);
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--white);
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .category-card:hover,
+        .category-card:focus {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            outline: 2px solid var(--primary-color);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Favorites Section */
+        .favorites-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .favorites-empty {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-light);
+        }
+
+        .favorites-empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Products Grid (Promotions) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background: var(--bg-light);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #F44336;
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .product-prices {
+            margin-bottom: 0.75rem;
+        }
+
+        .price-old {
+            text-decoration: line-through;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .price-current {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .price-unit {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            background: var(--secondary-color);
+            color: var(--white);
+            padding: 0.625rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-cart:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* Partners Section */
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .partner-card {
+            background: var(--white);
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .partner-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .partner-logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .partner-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .partner-link {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 3rem 1.5rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+            display: block;
+            padding: 0.25rem 0;
+        }
+
+        .footer-section a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            opacity: 0.8;
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Wave decoration in footer */
+        .wave-decoration {
+            position: relative;
+            margin-top: -1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 1rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <span>🛒</span> Econo<span>Fácil</span>
+            </a>
+
+            <div class="search-container">
+                <label for="search" class="visually-hidden">Buscar produtos ou receitas</label>
+                <input 
+                    type="search" 
+                    id="search" 
+                    class="search-input" 
+                    placeholder="Busque por produto ou receita..."
+                    aria-label="Campo de busca"
+                    autocomplete="off"
+                >
+                <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
+            </div>
+
+            <!-- Cart Icon -->
+            <a href="carrinho.html" class="cart-icon" title="Carrinho de Compras" aria-label="Carrinho de Compras">
+                🛒
+                <span class="cart-badge" id="cartBadge">0</span>
+            </a>
+
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="btn btn-outline">Entrar</a>
+                <a href="cadastro.html" class="btn btn-primary">Cadastrar-se</a>
+            </div>
+
+            <div class="user-greeting" id="userGreeting" style="display: none;">
+                <span id="userName">Olá, Usuário</span>
+                <button class="btn btn-primary" id="userMenuBtn" aria-haspopup="true" aria-expanded="false">▾</button>
+                <nav class="user-menu" id="userMenu" role="menu">
+                    <a href="listas.html" role="menuitem">📋 Minhas Listas</a>
+                    <a href="pedidos.html" role="menuitem">📦 Pedidos</a>
+                    <a href="perfil.html" role="menuitem">👤 Perfil</a>
+                    <a href="#" id="logoutBtn" role="menuitem">🚪 Sair</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Categories Section -->
+        <section class="section" aria-labelledby="categories-title">
+            <h2 id="categories-title" class="section-title">
+                📂 Categorias
+            </h2>
+            <div class="categories-grid" role="list">
+                <a href="categoria.html?cat=mercearia" class="category-card" role="listitem">
+                    <div class="category-icon">🛒</div>
+                    <div class="category-name">Mercearia</div>
+                </a>
+                <a href="categoria.html?cat=laticinios" class="category-card" role="listitem">
+                    <div class="category-icon">🥛</div>
+                    <div class="category-name">Laticínios</div>
+                </a>
+                <a href="categoria.html?cat=carnes" class="category-card" role="listitem">
+                    <div class="category-icon">🥩</div>
+                    <div class="category-name">Carnes</div>
+                </a>
+                <a href="categoria.html?cat=hortifruti" class="category-card" role="listitem">
+                    <div class="category-icon">🥬</div>
+                    <div class="category-name">Hortifruti</div>
+                </a>
+                <a href="categoria.html?cat=bebidas" class="category-card" role="listitem">
+                    <div class="category-icon">🍻</div>
+                    <div class="category-name">Bebidas</div>
+                </a>
+                <a href="categoria.html?cat=limpeza" class="category-card" role="listitem">
+                    <div class="category-icon">🧹</div>
+                    <div class="category-name">Limpeza</div>
+                </a>
+                <a href="categoria.html?cat=higiene" class="category-card" role="listitem">
+                    <div class="category-icon">🧴</div>
+                    <div class="category-name">Higiene</div>
+                </a>
+                <a href="categoria.html?cat=padaria" class="category-card" role="listitem">
+                    <div class="category-icon">🍞</div>
+                    <div class="category-name">Padaria</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Favorites Section -->
+        <section class="section" id="favoritesSection" aria-labelledby="favorites-title">
+            <h2 id="favorites-title" class="section-title">
+                ⭐ Seus Favoritos
+            </h2>
+            <div class="favorites-container">
+                <div class="favorites-empty" id="favoritesEmpty">
+                    <div class="favorites-empty-icon">⭐</div>
+                    <h3>Entre para salvar seus favoritos</h3>
+                    <p>Faça login para marcar produtos e acessá-los rapidamente</p>
+                    <a href="login.html" class="btn btn-primary" style="margin-top: 1rem;">Entrar agora</a>
+                </div>
+                <div class="favorites-grid" id="favoritesGrid" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Promotions Section -->
+        <section class="section" aria-labelledby="promotions-title">
+            <h2 id="promotions-title" class="section-title">
+                🔥 Promoções da Semana
+            </h2>
+            <div class="products-grid" role="list">
+                <!-- Product 1 -->
+                <article class="product-card" role="listitem">
+                    <div style="position: relative;">
+                        <img src="https://via.placeholder.com/300x300/4CAF50/FFFFFF?text=Arroz" alt="Arroz Tipo 1" class="product-image">
+                        <span class="product-badge">-25%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Arroz Tipo 1 - 5kg</h3>
+                        <div class="product-prices">
+                            <div class="price-old">De R$ 28,90</div>
+                            <div class="price-current">R$ 21,68</div>
+                            <div class="price-unit">R$ 4,34/kg</div>
+                        </div>
+                        <button class="btn-add-cart" aria-label="Adicionar Arroz ao carrinho">
+                            Adicionar
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Product 2 -->
+                <article class="product-card" role="listitem">
+                    <div style="position: relative;">
+                        <img src="https://via.placeholder.com/300x300/2196F3/FFFFFF?text=Feijão" alt="Feijão Preto" class="product-image">
+                        <span class="product-badge">-18%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Feijão Preto - 1kg</h3>
+                        <div class="product-prices">
+                            <div class="price-old">De R$ 8,50</div>
+                            <div class="price-current">R$ 6,97</div>
+                            <div class="price-unit">R$ 6,97/kg</div>
+                        </div>
+                        <button class="btn-add-cart" aria-label="Adicionar Feijão ao carrinho">
+                            Adicionar
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Product 3 -->
+                <article class="product-card" role="listitem">
+                    <div style="position: relative;">
+                        <img src="https://via.placeholder.com/300x300/FF9800/FFFFFF?text=Óleo" alt="Óleo de Soja" class="product-image">
+                        <span class="product-badge">-30%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Óleo de Soja - 900ml</h3>
+                        <div class="product-prices">
+                            <div class="price-old">De R$ 9,90</div>
+                            <div class="price-current">R$ 6,93</div>
+                            <div class="price-unit">R$ 7,70/L</div>
+                        </div>
+                        <button class="btn-add-cart" aria-label="Adicionar Óleo ao carrinho">
+                            Adicionar
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Product 4 -->
+                <article class="product-card" role="listitem">
+                    <div style="position: relative;">
+                        <img src="https://via.placeholder.com/300x300/9C27B0/FFFFFF?text=Açúcar" alt="Açúcar Cristal" class="product-image">
+                        <span class="product-badge">-22%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Açúcar Cristal - 2kg</h3>
+                        <div class="product-prices">
+                            <div class="price-old">De R$ 8,20</div>
+                            <div class="price-current">R$ 6,40</div>
+                            <div class="price-unit">R$ 3,20/kg</div>
+                        </div>
+                        <button class="btn-add-cart" aria-label="Adicionar Açúcar ao carrinho">
+                            Adicionar
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Product 5 -->
+                <article class="product-card" role="listitem">
+                    <div style="position: relative;">
+                        <img src="https://via.placeholder.com/300x300/E91E63/FFFFFF?text=Café" alt="Café em Pó" class="product-image">
+                        <span class="product-badge">-15%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Café em Pó - 500g</h3>
+                        <div class="product-prices">
+                            <div class="price-old">De R$ 18,90</div>
+                            <div class="price-current">R$ 16,07</div>
+                            <div class="price-unit">R$ 32,14/kg</div>
+                        </div>
+                        <button class="btn-add-cart" aria-label="Adicionar Café ao carrinho">
+                            Adicionar
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Product 6 -->
+                <article class="product-card" role="listitem">
+                    <div style="position: relative;">
+                        <img src="https://via.placeholder.com/300x300/00BCD4/FFFFFF?text=Leite" alt="Leite Integral" class="product-image">
+                        <span class="product-badge">-20%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Leite Integral - 1L</h3>
+                        <div class="product-prices">
+                            <div class="price-old">De R$ 5,50</div>
+                            <div class="price-current">R$ 4,40</div>
+                            <div class="price-unit">R$ 4,40/L</div>
+                        </div>
+                        <button class="btn-add-cart" aria-label="Adicionar Leite ao carrinho">
+                            Adicionar
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="section" aria-labelledby="partners-title">
+            <h2 id="partners-title" class="section-title">
+                🏪 Empresas Parceiras
+            </h2>
+            <div class="partners-grid" role="list">
+                <a href="parceiro.html?id=1" class="partner-card" role="listitem">
+                    <div class="partner-logo">🛒</div>
+                    <div class="partner-name">Mercado Central</div>
+                    <div class="partner-link">Ver vitrine →</div>
+                </a>
+                <a href="parceiro.html?id=2" class="partner-card" role="listitem">
+                    <div class="partner-logo">🏪</div>
+                    <div class="partner-name">SuperCompras</div>
+                    <div class="partner-link">Ver vitrine →</div>
+                </a>
+                <a href="parceiro.html?id=3" class="partner-card" role="listitem">
+                    <div class="partner-logo">🛍️</div>
+                    <div class="partner-name">Atacadão Familiar</div>
+                    <div class="partner-link">Ver vitrine →</div>
+                </a>
+                <a href="parceiro.html?id=4" class="partner-card" role="listitem">
+                    <div class="partner-logo">🏬</div>
+                    <div class="partner-name">Zona Sul</div>
+                    <div class="partner-link">Ver vitrine →</div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="wave-decoration">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" style="width: 100%; height: 60px; display: block;">
+                <path d="M0,0 C200,60 400,60 600,30 C800,0 1000,0 1200,30 L1200,120 L0,120 Z" fill="white" opacity="0.1"/>
+            </svg>
+        </div>
+        
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre o EconoFácil</h3>
+                <ul>
+                    <li><a href="sobre.html">Quem Somos</a></li>
+                    <li><a href="como-funciona.html">Como Funciona</a></li>
+                    <li><a href="parceiros.html">Seja Parceiro</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Ajuda</h3>
+                <ul>
+                    <li><a href="faq.html">Perguntas Frequentes</a></li>
+                    <li><a href="contato.html">Fale Conosco</a></li>
+                    <li><a href="suporte.html">Central de Ajuda</a></li>
+                    <li><a href="entrega.html">Política de Entrega</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="termos.html">Termos de Uso</a></li>
+                    <li><a href="privacidade.html">Política de Privacidade</a></li>
+                    <li><a href="cookies.html">Política de Cookies</a></li>
+                    <li><a href="acessibilidade.html">Acessibilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Redes Sociais</h3>
+                <ul>
+                    <li><a href="#" aria-label="Facebook">📘 Facebook</a></li>
+                    <li><a href="#" aria-label="Instagram">📷 Instagram</a></li>
+                    <li><a href="#" aria-label="Twitter">🐦 Twitter</a></li>
+                    <li><a href="#" aria-label="YouTube">📺 YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="payment-icons">
+                <span title="PIX">💳</span>
+                <span title="Cartão de Crédito">💳</span>
+                <span title="Cartão de Débito">💳</span>
+            </div>
+            <p style="margin-top: 1rem;">
+                © 2025 EconoFácil - Todos os direitos reservados<br>
+                Economize em suas compras com inteligência
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Simulação de autenticação
+        let isAuthenticated = false;
+        let currentUser = null;
+
+        // Verificar se usuário está logado (usando localStorage para simular)
+        function checkAuth() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                isAuthenticated = true;
+                currentUser = JSON.parse(user);
+                updateHeaderAuth();
+                updateFavorites();
+            }
+        }
+
+        // Atualizar header com base na autenticação
+        function updateHeaderAuth() {
+            const authButtons = document.getElementById('authButtons');
+            const userGreeting = document.getElementById('userGreeting');
+            const userName = document.getElementById('userName');
+
+            if (isAuthenticated && currentUser) {
+                authButtons.style.display = 'none';
+                userGreeting.style.display = 'flex';
+                userName.textContent = `Olá, ${currentUser.firstName}`;
+            } else {
+                authButtons.style.display = 'flex';
+                userGreeting.style.display = 'none';
+            }
+        }
+
+        // Atualizar seção de favoritos
+        function updateFavorites() {
+            const favoritesEmpty = document.getElementById('favoritesEmpty');
+            const favoritesGrid = document.getElementById('favoritesGrid');
+
+            if (isAuthenticated) {
+                favoritesEmpty.style.display = 'none';
+                favoritesGrid.style.display = 'grid';
+                // Aqui você carregaria os favoritos reais do usuário
+                loadFavorites();
+            } else {
+                favoritesEmpty.style.display = 'block';
+                favoritesGrid.style.display = 'none';
+            }
+        }
+
+        // Carregar favoritos (simulado)
+        function loadFavorites() {
+            const favoritesGrid = document.getElementById('favoritesGrid');
+            
+            // Buscar favoritos do localStorage
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            
+            if (favorites.length === 0) {
+                favoritesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-light);">Você ainda não tem favoritos. Explore nossos produtos e toque no ❤️ para salvar!</p>';
+                return;
+            }
+            
+            // Criar cards dos produtos favoritos
+            favoritesGrid.innerHTML = favorites.map(product => `
+                <div class="product-card">
+                    <span class="favorite-badge active" onclick="toggleFavorite('${product.id}', event)">❤️</span>
+                    <img src="${product.image || 'https://via.placeholder.com/200?text=' + encodeURIComponent(product.name)}" 
+                         alt="${product.name}" 
+                         loading="lazy">
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="product-brand">${product.brand || 'Marca'}</p>
+                        <p class="product-volume">${product.volume || '1kg'}</p>
+                        <p class="product-price">R$ ${product.price.toFixed(2)}</p>
+                        <p class="product-unit-price">R$ ${(product.price / parseFloat(product.volume || 1)).toFixed(2)}/${product.unit || 'kg'}</p>
+                        <button class="btn-add-cart" onclick="addToCart('${product.id}', '${product.name}', ${product.price})">
+                            🛒 Adicionar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Menu do usuário
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenu = document.getElementById('userMenu');
+
+        if (userMenuBtn) {
+            userMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isExpanded = userMenu.classList.toggle('active');
+                userMenuBtn.setAttribute('aria-expanded', isExpanded);
+            });
+        }
+
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (userMenu && !e.target.closest('.user-greeting')) {
+                userMenu.classList.remove('active');
+                if (userMenuBtn) {
+                    userMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+
+        // Logout
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                isAuthenticated = false;
+                currentUser = null;
+                updateHeaderAuth();
+                updateFavorites();
+                alert('Você saiu da sua conta');
+            });
+        }
+
+        // Busca com sugestões
+        const searchInput = document.getElementById('search');
+        const searchSuggestions = document.getElementById('searchSuggestions');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const query = e.target.value.trim();
+
+            if (query.length < 2) {
+                searchSuggestions.classList.remove('active');
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                // Simular sugestões
+                const suggestions = [
+                    'Arroz integral 1kg',
+                    'Arroz tipo 1 5kg',
+                    'Feijão preto',
+                    'Óleo de soja',
+                    'Receita: Feijoada'
+                ];
+
+                searchSuggestions.innerHTML = suggestions
+                    .filter(s => s.toLowerCase().includes(query.toLowerCase()))
+                    .map(s => `<div class="suggestion-item" role="option">${s}</div>`)
+                    .join('');
+
+                searchSuggestions.classList.add('active');
+            }, 300);
+        });
+
+        // Selecionar sugestão
+        searchSuggestions.addEventListener('click', (e) => {
+            if (e.target.classList.contains('suggestion-item')) {
+                searchInput.value = e.target.textContent;
+                searchSuggestions.classList.remove('active');
+                // Aqui você faria a busca real
+                console.log('Buscando:', e.target.textContent);
+            }
+        });
+
+        // Fechar sugestões ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                searchSuggestions.classList.remove('active');
+            }
+        });
+
+        // Adicionar ao carrinho
+        document.querySelectorAll('.btn-add-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.textContent = '✓ Adicionado';
+                btn.style.background = '#45a049';
+                
+                // Atualizar contador do carrinho
+                updateCartBadge();
+                
+                setTimeout(() => {
+                    btn.textContent = 'Adicionar';
+                    btn.style.background = '';
+                }, 2000);
+            });
+        });
+
+        // Função para adicionar produto ao carrinho (usada pelos cards de favoritos)
+        function addToCart(productId, productName, price) {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Verificar se o produto já está no carrinho
+            const existingItem = cart.find(item => item.productId === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    productId: productId,
+                    productName: productName,
+                    quantity: 1,
+                    price: price,
+                    storeId: 'store_001' // ID padrão da loja
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+            
+            // Feedback visual
+            alert(`${productName} adicionado ao carrinho!`);
+        }
+
+        // Função para alternar favorito
+        function toggleFavorite(productId, event) {
+            event.stopPropagation();
+            
+            let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const index = favorites.findIndex(fav => fav.id === productId);
+            
+            if (index > -1) {
+                // Remover dos favoritos
+                favorites.splice(index, 1);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                
+                // Recarregar a grade de favoritos
+                if (isAuthenticated) {
+                    loadFavorites();
+                }
+                
+                // Telemetria
+                trackEvent('favorite_removed', { product_id: productId });
+            } else {
+                // Este caso não deve acontecer na página inicial, mas por segurança
+                console.log('Produto não encontrado nos favoritos');
+            }
+        }
+
+        // Atualizar badge do carrinho
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartBadge = document.getElementById('cartBadge');
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Inicializar badge do carrinho
+        updateCartBadge();
+
+        // Telemetria (simulada)
+        function trackEvent(eventName, data = {}) {
+            console.log('Event:', eventName, data);
+            // Aqui você enviaria para seu sistema de analytics
+        }
+
+        // Tracking de visualização da home
+        trackEvent('home_viewed', {
+            timestamp: new Date().toISOString(),
+            user_id: currentUser?.id || null
+        });
+
+        // Inicializar
+        checkAuth();
+
+        // Adicionar produtos de exemplo aos favoritos para demonstração (apenas se usuário estiver logado e não tiver favoritos)
+        function addDemoFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            
+            if (isAuthenticated && favorites.length === 0) {
+                const demoFavorites = [
+                    {
+                        id: 'sku_arroz_integral_1kg',
+                        name: 'Arroz Integral',
+                        brand: 'Tio João',
+                        volume: '1kg',
+                        unit: 'kg',
+                        price: 8.99,
+                        image: 'https://via.placeholder.com/200/4CAF50/ffffff?text=Arroz+Integral'
+                    },
+                    {
+                        id: 'sku_feijao_preto_1kg',
+                        name: 'Feijão Preto',
+                        brand: 'Camil',
+                        volume: '1kg',
+                        unit: 'kg',
+                        price: 6.49,
+                        image: 'https://via.placeholder.com/200/795548/ffffff?text=Feijão+Preto'
+                    },
+                    {
+                        id: 'sku_leite_sem_lactose_1l',
+                        name: 'Leite Sem Lactose Integral',
+                        brand: 'Italac',
+                        volume: '1L',
+                        unit: 'L',
+                        price: 5.99,
+                        image: 'https://via.placeholder.com/200/2196F3/ffffff?text=Leite+Zero+Lactose'
+                    },
+                    {
+                        id: 'sku_oleo_soja_900ml',
+                        name: 'Óleo de Soja',
+                        brand: 'Liza',
+                        volume: '900ml',
+                        unit: 'L',
+                        price: 7.29,
+                        image: 'https://via.placeholder.com/200/FFC107/ffffff?text=Óleo+de+Soja'
+                    }
+                ];
+                
+                localStorage.setItem('favorites', JSON.stringify(demoFavorites));
+                loadFavorites();
+            }
+        }
+
+        // Adicionar favoritos de demonstração se aplicável
+        addDemoFavorites();
+
+        // Acessibilidade - navegação por teclado
+        document.querySelectorAll('.category-card, .product-card, .partner-card').forEach(card => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

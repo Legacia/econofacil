@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receitas Inteligentes - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #2563eb, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-subtitle {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* Recipe Search */
+        .recipe-search {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-input {
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: end;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+        }
+
+        .preferences {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .pref-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pref-checkbox input {
+            cursor: pointer;
+        }
+
+        .pref-checkbox:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .pref-checkbox input:checked + label {
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        /* Recipe Result */
+        .recipe-result {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .recipe-result.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .recipe-info {
+            flex: 1;
+        }
+
+        .recipe-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .recipe-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Ingredients */
+        .ingredients-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ingredients-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ingredient-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .ingredient-item:hover {
+            border-color: #2563eb;
+            transform: translateX(5px);
+        }
+
+        .ingredient-info {
+            flex: 1;
+        }
+
+        .ingredient-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .ingredient-amount {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .ingredient-sku {
+            font-size: 12px;
+            color: #10b981;
+            margin-top: 3px;
+        }
+
+        .ingredient-warning {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .ingredient-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .btn-icon:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .ingredient-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-left: 15px;
+        }
+
+        /* Utensils */
+        .utensils-section {
+            background: #eff6ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .utensils-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .utensil-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .utensil-checkbox {
+            cursor: pointer;
+        }
+
+        /* Summary */
+        .summary-section {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: #475569;
+            font-size: 15px;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 15px;
+        }
+
+        .total-row {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #94a3b8;
+        }
+
+        .total-row .summary-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .total-row .summary-value {
+            font-size: 24px;
+            color: #2563eb;
+        }
+
+        .economy-highlight {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Actions */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-action {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* Suggestions */
+        .suggestions {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .suggestions-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+
+        .suggestion-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .suggestion-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-search {
+                width: 100%;
+            }
+
+            .recipe-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🍳 Receitas Inteligentes</div>
+            <div class="header-subtitle">
+                Digite o prato e o número de pessoas, e nós calculamos tudo para você!
+            </div>
+        </div>
+
+        <!-- Recipe Search -->
+        <div class="recipe-search">
+            <div class="search-title">
+                🔍 Buscar Receita
+            </div>
+
+            <form class="search-form" onsubmit="searchRecipe(event)">
+                <div class="form-group">
+                    <label class="form-label">Nome do Prato</label>
+                    <input type="text" class="form-input" id="recipeName" 
+                           placeholder="Ex: Feijoada, Macarronada, Lasanha..." required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Número de Pessoas</label>
+                    <input type="number" class="form-input" id="numPeople" 
+                           placeholder="4" min="1" max="50" value="4" required>
+                </div>
+
+                <button type="submit" class="btn-search">
+                    🔍 Buscar
+                </button>
+            </form>
+
+            <div class="preferences">
+                <label class="pref-checkbox">
+                    <input type="checkbox" id="vegetarian">
+                    <span>🥗 Vegetariano</span>
+                </label>
+                <label class="pref-checkbox">
+                    <input type="checkbox" id="vegan">
+                    <span>🌱 Vegano</span>
+                </label>
+                <label class="pref-checkbox">
+                    <input type="checkbox" id="lactoseFree">
+                    <span>🚫🥛 Sem Lactose</span>
+                </label>
+                <label class="pref-checkbox">
+                    <input type="checkbox" id="glutenFree">
+                    <span>🚫🌾 Sem Glúten</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Recipe Result -->
+        <div class="recipe-result" id="recipeResult">
+            <!-- Recipe Header -->
+            <div class="recipe-header">
+                <div class="recipe-info">
+                    <div class="recipe-name" id="recipeName">Feijoada Completa</div>
+                    <div class="recipe-meta">
+                        <span>👥 <strong id="servings">10 pessoas</strong></span>
+                        <span>⏱️ <strong>3h preparo</strong></span>
+                        <span>🔥 <strong>Médio</strong></span>
+                    </div>
+                </div>
+                <div class="recipe-badge">
+                    💰 Economia: <span id="economyBadge">R$ 64,30</span>
+                </div>
+            </div>
+
+            <!-- Ingredients -->
+            <div class="ingredients-section">
+                <div class="section-title">
+                    🛒 Ingredientes (dimensionados e arredondados)
+                </div>
+                <div class="ingredients-list" id="ingredientsList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+
+            <!-- Utensils -->
+            <div class="utensils-section">
+                <div class="section-title">
+                    🍴 Utensílios Necessários
+                </div>
+                <div class="utensils-list" id="utensilsList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-section">
+                <div class="section-title">
+                    📊 Resumo da Compra
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal (ingredientes)</span>
+                    <span class="summary-value" id="subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Estimativa de frete</span>
+                    <span class="summary-value" id="shipping">R$ 0,00</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span class="summary-label">Total Estimado</span>
+                    <span class="summary-value" id="total">R$ 0,00</span>
+                </div>
+
+                <div class="economy-highlight">
+                    💰 Você economiza <strong id="economy">R$ 64,30</strong> comprando em múltiplas lojas!
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="suggestions" id="suggestions" style="display: none;">
+                <div class="suggestions-title">💡 Sugestões de Otimização</div>
+                <div id="suggestionsList"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn-action btn-primary" onclick="addToCart()">
+                    🛒 Adicionar ao Carrinho
+                </button>
+                <button class="btn-action btn-primary" onclick="optimizeAndCheckout()">
+                    ⚡ Otimizar e Finalizar Compra
+                </button>
+                <button class="btn-action btn-secondary" onclick="downloadList()">
+                    📥 Baixar Lista
+                </button>
+                <button class="btn-action btn-secondary" onclick="shareRecipe()">
+                    📤 Compartilhar
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <div style="color: white; font-size: 18px; font-weight: 600;">
+                Calculando ingredientes e otimizando preços...
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Mock recipe data
+        const recipesDatabase = {
+            'feijoada': {
+                name: 'Feijoada Completa',
+                baseServings: 4,
+                prepTime: '3h',
+                difficulty: 'Médio',
+                ingredients: [
+                    { name: 'Feijão preto', amount: 500, unit: 'g', sku_id: 'SKU001', price_per_unit: 8.90, package_size: 500 },
+                    { name: 'Carne seca', amount: 400, unit: 'g', sku_id: 'SKU002', price_per_unit: 42.90, package_size: 500 },
+                    { name: 'Linguiça calabresa', amount: 600, unit: 'g', sku_id: 'SKU003', price_per_unit: 18.90, package_size: 600 },
+                    { name: 'Costela suína', amount: 800, unit: 'g', sku_id: 'SKU004', price_per_unit: 24.90, package_size: 1000 },
+                    { name: 'Bacon', amount: 200, unit: 'g', sku_id: 'SKU005', price_per_unit: 15.90, package_size: 200 },
+                    { name: 'Cebola', amount: 200, unit: 'g', sku_id: 'SKU006', price_per_unit: 3.50, package_size: 500 },
+                    { name: 'Alho', amount: 50, unit: 'g', sku_id: 'SKU007', price_per_unit: 4.90, package_size: 100 },
+                    { name: 'Tomate', amount: 300, unit: 'g', sku_id: 'SKU008', price_per_unit: 6.90, package_size: 1000 },
+                    { name: 'Louro', amount: 5, unit: 'g', sku_id: 'SKU009', price_per_unit: 2.50, package_size: 5 },
+                    { name: 'Sal', amount: 30, unit: 'g', sku_id: 'SKU010', price_per_unit: 1.90, package_size: 1000 }
+                ],
+                utensils: [
+                    { name: 'Panela de pressão 8L', required: true },
+                    { name: 'Frigideira grande', required: true },
+                    { name: 'Faca de cozinha', required: true },
+                    { name: 'Tábua de corte', required: true },
+                    { name: 'Colher de pau', required: true }
+                ]
+            },
+            'macarronada': {
+                name: 'Macarronada à Bolonhesa',
+                baseServings: 4,
+                prepTime: '1h',
+                difficulty: 'Fácil',
+                ingredients: [
+                    { name: 'Macarrão espaguete', amount: 500, unit: 'g', sku_id: 'SKU011', price_per_unit: 4.50, package_size: 500 },
+                    { name: 'Carne moída', amount: 500, unit: 'g', sku_id: 'SKU012', price_per_unit: 18.90, package_size: 500 },
+                    { name: 'Molho de tomate', amount: 340, unit: 'ml', sku_id: 'SKU013', price_per_unit: 2.90, package_size: 340 },
+                    { name: 'Cebola', amount: 100, unit: 'g', sku_id: 'SKU006', price_per_unit: 3.50, package_size: 500 },
+                    { name: 'Alho', amount: 30, unit: 'g', sku_id: 'SKU007', price_per_unit: 4.90, package_size: 100 },
+                    { name: 'Queijo ralado', amount: 100, unit: 'g', sku_id: 'SKU014', price_per_unit: 12.90, package_size: 100 },
+                    { name: 'Azeite', amount: 50, unit: 'ml', sku_id: 'SKU015', price_per_unit: 18.90, package_size: 500 }
+                ],
+                utensils: [
+                    { name: 'Panela 5L', required: true },
+                    { name: 'Frigideira média', required: true },
+                    { name: 'Escorredor de macarrão', required: true },
+                    { name: 'Faca de cozinha', required: true }
+                ]
+            }
+        };
+
+        // Search recipe
+        function searchRecipe(event) {
+            event.preventDefault();
+
+            const recipeName = document.getElementById('recipeName').value.toLowerCase();
+            const numPeople = parseInt(document.getElementById('numPeople').value);
+
+            // Get preferences
+            const preferences = {
+                vegetarian: document.getElementById('vegetarian').checked,
+                vegan: document.getElementById('vegan').checked,
+                lactoseFree: document.getElementById('lactoseFree').checked,
+                glutenFree: document.getElementById('glutenFree').checked
+            };
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('recipeResult').classList.remove('active');
+
+            // Simulate API call
+            setTimeout(() => {
+                // Find recipe (simple matching)
+                let recipe = null;
+                for (const key in recipesDatabase) {
+                    if (recipeName.includes(key)) {
+                        recipe = recipesDatabase[key];
+                        break;
+                    }
+                }
+
+                if (!recipe) {
+                    // Default to first recipe if not found
+                    recipe = recipesDatabase['feijoada'];
+                    showToast('Receita não encontrada. Mostrando uma sugestão!', 'success');
+                }
+
+                // Scale and display recipe
+                displayRecipe(recipe, numPeople, preferences);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('recipeResult').classList.add('active');
+
+                // Scroll to result
+                document.getElementById('recipeResult').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+
+                // Telemetry
+                console.log('Telemetry: recipe_searched', {
+                    recipe: recipe.name,
+                    servings: numPeople,
+                    preferences: preferences,
+                    timestamp: new Date().toISOString()
+                });
+            }, 1500);
+        }
+
+        // Display recipe
+        function displayRecipe(recipe, numPeople, preferences) {
+            // Calculate scaling factor
+            const scaleFactor = numPeople / recipe.baseServings;
+
+            // Update header
+            document.getElementById('recipeName').textContent = recipe.name;
+            document.getElementById('servings').textContent = `${numPeople} pessoas`;
+
+            // Scale and round ingredients to packages
+            const scaledIngredients = recipe.ingredients.map(ingredient => {
+                const scaledAmount = ingredient.amount * scaleFactor;
+                
+                // Round up to package multiples (RN-002)
+                const packagesNeeded = Math.ceil(scaledAmount / ingredient.package_size);
+                const actualAmount = packagesNeeded * ingredient.package_size;
+                const surplus = actualAmount - scaledAmount;
+                
+                // Calculate price
+                const totalPrice = (ingredient.price_per_unit / ingredient.package_size) * actualAmount;
+
+                return {
+                    ...ingredient,
+                    scaledAmount: scaledAmount,
+                    actualAmount: actualAmount,
+                    packagesNeeded: packagesNeeded,
+                    surplus: surplus,
+                    totalPrice: totalPrice
+                };
+            });
+
+            // Render ingredients
+            renderIngredients(scaledIngredients);
+
+            // Render utensils
+            renderUtensils(recipe.utensils);
+
+            // Calculate summary
+            const subtotal = scaledIngredients.reduce((sum, ing) => sum + ing.totalPrice, 0);
+            const shipping = 24.50; // Mock shipping
+            const total = subtotal + shipping;
+            const economy = 64.30; // Mock economy from multi-store optimization
+
+            document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('shipping').textContent = formatCurrency(shipping);
+            document.getElementById('total').textContent = formatCurrency(total);
+            document.getElementById('economy').textContent = formatCurrency(economy);
+            document.getElementById('economyBadge').textContent = formatCurrency(economy);
+
+            // Show suggestions if there's significant surplus
+            showSuggestions(scaledIngredients);
+        }
+
+        // Render ingredients
+        function renderIngredients(ingredients) {
+            const container = document.getElementById('ingredientsList');
+            container.innerHTML = '';
+
+            ingredients.forEach((ingredient, index) => {
+                const surplusPercent = (ingredient.surplus / ingredient.actualAmount) * 100;
+                const hasWarning = surplusPercent > 15; // Warning if surplus > 15%
+
+                const item = document.createElement('div');
+                item.className = 'ingredient-item';
+                item.innerHTML = `
+                    <div class="ingredient-info">
+                        <div class="ingredient-name">${ingredient.name}</div>
+                        <div class="ingredient-amount">
+                            Necessário: ${formatAmount(ingredient.scaledAmount, ingredient.unit)} → 
+                            Comprar: <strong>${formatAmount(ingredient.actualAmount, ingredient.unit)}</strong>
+                            ${ingredient.packagesNeeded > 1 ? `(${ingredient.packagesNeeded} ${ingredient.unit === 'g' || ingredient.unit === 'ml' ? 'embalagens' : 'unidades'})` : ''}
+                        </div>
+                        ${ingredient.surplus > 0 ? `
+                            <div class="ingredient-sku">
+                                ✓ Sobra: ${formatAmount(ingredient.surplus, ingredient.unit)} 
+                                (${surplusPercent.toFixed(0)}% a mais)
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${hasWarning ? `
+                        <div class="ingredient-warning">
+                            ⚠️ Sobra alta
+                        </div>
+                    ` : ''}
+                    <div class="ingredient-actions">
+                        <button class="btn-icon" onclick="substituteIngredient(${index})" title="Ver substituições">
+                            🔄
+                        </button>
+                        <button class="btn-icon" onclick="removeIngredient(${index})" title="Remover">
+                            ❌
+                        </button>
+                    </div>
+                    <div class="ingredient-price">
+                        ${formatCurrency(ingredient.totalPrice)}
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Render utensils
+        function renderUtensils(utensils) {
+            const container = document.getElementById('utensilsList');
+            container.innerHTML = '';
+
+            utensils.forEach((utensil, index) => {
+                const item = document.createElement('div');
+                item.className = 'utensil-item';
+                item.innerHTML = `
+                    <input type="checkbox" class="utensil-checkbox" id="utensil${index}" 
+                           onchange="toggleUtensil(${index})">
+                    <label for="utensil${index}">${utensil.name}</label>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Show suggestions
+        function showSuggestions(ingredients) {
+            const highSurplus = ingredients.filter(ing => {
+                const surplusPercent = (ing.surplus / ing.actualAmount) * 100;
+                return surplusPercent > 20;
+            });
+
+            if (highSurplus.length > 0) {
+                const container = document.getElementById('suggestions');
+                const list = document.getElementById('suggestionsList');
+                list.innerHTML = '';
+
+                highSurplus.forEach(ing => {
+                    const item = document.createElement('div');
+                    item.className = 'suggestion-item';
+                    item.innerHTML = `
+                        <strong>${ing.name}:</strong> Considere reduzir o número de pessoas 
+                        ou comprar ${formatAmount(ing.actualAmount - ing.package_size, ing.unit)} 
+                        de outra marca com embalagem menor.
+                    `;
+                    list.appendChild(item);
+                });
+
+                container.style.display = 'block';
+            } else {
+                document.getElementById('suggestions').style.display = 'none';
+            }
+        }
+
+        // Substitute ingredient
+        function substituteIngredient(index) {
+            showToast('Buscando substituições disponíveis...', 'success');
+            // In production: show modal with alternatives
+            console.log('Substituting ingredient at index:', index);
+        }
+
+        // Remove ingredient
+        function removeIngredient(index) {
+            if (confirm('Tem certeza que deseja remover este ingrediente?')) {
+                showToast('Ingrediente removido', 'success');
+                // In production: update recipe state and re-render
+            }
+        }
+
+        // Toggle utensil
+        function toggleUtensil(index) {
+            console.log('Toggled utensil:', index);
+            // In production: track which utensils user already has
+        }
+
+        // Add to cart
+        function addToCart() {
+            showToast('Adicionando ingredientes ao carrinho...', 'success');
+            setTimeout(() => {
+                window.location.href = 'carrinho.html';
+            }, 1500);
+        }
+
+        // Optimize and checkout
+        function optimizeAndCheckout() {
+            showToast('Otimizando compra entre múltiplas lojas...', 'success');
+            setTimeout(() => {
+                window.location.href = 'checkout.html';
+            }, 1500);
+        }
+
+        // Download list
+        function downloadList() {
+            showToast('Baixando lista de compras...', 'success');
+            // In production: generate PDF or text file
+        }
+
+        // Share recipe
+        function shareRecipe() {
+            const shareText = 'Confira esta receita no EconoFácil! Calcule ingredientes automaticamente.';
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Receita EconoFácil',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText + ' ' + window.location.href);
+                showToast('Link copiado para compartilhar!', 'success');
+            }
+        }
+
+        // Format amount
+        function formatAmount(amount, unit) {
+            if (amount >= 1000 && (unit === 'g' || unit === 'ml')) {
+                return (amount / 1000).toFixed(2) + ' ' + (unit === 'g' ? 'kg' : 'L');
+            }
+            return amount.toFixed(0) + ' ' + unit;
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        // Show toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Telemetry
+        console.log('Telemetry: recipes_page_viewed', {
+            user_id: 'usr_001',
+            timestamp: new Date().toISOString()
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #003366;
+            --primary-green: #006633;
+            --light-blue: #E6F2FF;
+            --light-green: #E6F5E6;
+            --white: #FFFFFF;
+            --gray-100: #F5F5F5;
+            --gray-200: #E0E0E0;
+            --gray-300: #BDBDBD;
+            --gray-700: #424242;
+            --gray-900: #212121;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --info: #2196F3;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
+            min-height: 100vh;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Page Title */
+        .page-title {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .page-title h1 {
+            color: var(--primary-blue);
+            font-size: 2rem;
+        }
+
+        .item-count {
+            color: var(--gray-700);
+            font-size: 1.1rem;
+        }
+
+        /* Optimization Banner */
+        .optimization-banner {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--success), #66BB6A);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .optimization-banner .icon {
+            font-size: 3rem;
+        }
+
+        .optimization-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .optimization-info p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .savings-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        /* Empty Cart */
+        .empty-cart {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 16px;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .empty-cart .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-cart h2 {
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart p {
+            color: var(--gray-700);
+            margin-bottom: 2rem;
+        }
+
+        /* Store Section */
+        .store-section {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .store-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+            margin-bottom: 1rem;
+        }
+
+        .store-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: var(--gray-100);
+            padding: 0.5rem;
+        }
+
+        .store-info h3 {
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .store-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .store-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Minimum Alert */
+        .minimum-alert {
+            background: #FFF3E0;
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .minimum-alert .icon {
+            font-size: 1.5rem;
+        }
+
+        .minimum-alert-content h4 {
+            color: var(--warning);
+            margin-bottom: 0.25rem;
+        }
+
+        .minimum-alert-content p {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            background: var(--warning);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-small:hover {
+            background: #F57C00;
+        }
+
+        /* Cart Item */
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--gray-100);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .cart-item:hover {
+            background: var(--light-blue);
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            padding: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 1.05rem;
+        }
+
+        .item-brand {
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .item-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.reallocated {
+            background: #E3F2FD;
+            color: var(--info);
+        }
+
+        .badge.substituted {
+            background: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        .badge.low-stock {
+            background: #FFF3E0;
+            color: var(--warning);
+        }
+
+        .item-notes {
+            background: white;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            font-style: italic;
+        }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+
+        .item-price {
+            text-align: right;
+        }
+
+        .current-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        .unit-price {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            padding: 0.25rem;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .qty-btn:hover {
+            background: var(--primary-green);
+        }
+
+        .qty-display {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .item-remove {
+            background: none;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .item-remove:hover {
+            transform: scale(1.2);
+        }
+
+        /* Store Totals */
+        .store-totals {
+            background: var(--light-blue);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .total-row.main {
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-top: 2px solid var(--primary-blue);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .total-label {
+            color: var(--gray-700);
+        }
+
+        .total-value {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .total-value.savings {
+            color: var(--success);
+        }
+
+        .delivery-info {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .delivery-info strong {
+            color: var(--primary-blue);
+        }
+
+        /* Coupon Section */
+        .coupon-section {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .coupon-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .coupon-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .coupon-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .btn-apply {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-apply:hover {
+            background: var(--primary-green);
+        }
+
+        .applied-coupon {
+            background: var(--light-green);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .applied-coupon .code {
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .btn-remove-coupon {
+            background: none;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Summary Sidebar */
+        .summary-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .summary-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .summary-comparison {
+            background: var(--light-blue);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-title {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .comparison-values {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .comparison-item {
+            text-align: center;
+        }
+
+        .comparison-label {
+            font-size: 0.8rem;
+            color: var(--gray-700);
+            margin-bottom: 0.25rem;
+        }
+
+        .comparison-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .comparison-price.single {
+            color: var(--gray-700);
+            text-decoration: line-through;
+        }
+
+        .comparison-price.multi {
+            color: var(--success);
+        }
+
+        .comparison-arrow {
+            font-size: 2rem;
+            color: var(--success);
+        }
+
+        .summary-breakdown {
+            margin: 1rem 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-row.total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            border-top: 2px solid var(--primary-blue);
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+
+        .economy-highlight {
+            background: linear-gradient(135deg, var(--success), #66BB6A);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .economy-highlight .amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .economy-highlight .percentage {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        /* Trust Indicators */
+        .trust-indicators {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 1rem;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .trust-item .icon {
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+
+        /* Price Lock Timer */
+        .price-lock {
+            background: #FFF3E0;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .price-lock .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--warning);
+            margin: 0.5rem 0;
+        }
+
+        .price-lock .message {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        /* Store Notes */
+        .store-notes {
+            margin-top: 1rem;
+        }
+
+        .store-notes textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .store-notes textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--gray-900);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-hover);
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .cart-item {
+                flex-direction: column;
+            }
+
+            .item-image {
+                width: 100%;
+                height: 200px;
+            }
+
+            .item-actions {
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .optimization-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .savings-amount {
+                margin: 0;
+            }
+
+            .comparison-values {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .comparison-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span>🛒</span>
+                <span>EconoFácil</span>
+            </a>
+            <nav class="nav-links">
+                <a href="categoria.html">🔍 Buscar</a>
+                <a href="index.html#receitas">📖 Receitas</a>
+                <a href="perfil.html">👤 Perfil</a>
+                <a href="carrinho.html" style="background: rgba(255, 255, 255, 0.2);">🛒 Carrinho (7)</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>🛒 Meu Carrinho</h1>
+            <span class="item-count">7 itens em 3 lojas</span>
+        </div>
+
+        <!-- Optimization Banner -->
+        <div class="optimization-banner">
+            <div class="icon">💰</div>
+            <div class="optimization-info">
+                <h3>Compra Otimizada Multi-loja</h3>
+                <p>Dividimos sua compra em 3 lojas para você economizar mais! Entregas coordenadas para o mesmo dia.</p>
+            </div>
+            <div class="savings-amount">
+                <div>Economia</div>
+                <div>R$ 18,50</div>
+            </div>
+        </div>
+
+        <!-- Cart Items by Store -->
+        <div class="cart-content">
+            <!-- Store 1 -->
+            <section class="store-section">
+                <div class="store-header">
+                    <img src="https://via.placeholder.com/60x60/4CAF50/FFFFFF?text=A" 
+                         alt="Mercado A" 
+                         class="store-logo">
+                    <div class="store-info">
+                        <h3>Mercado Econômico A</h3>
+                        <div class="store-meta">
+                            <span>📍 1.2 km</span>
+                            <span>🚚 Entrega hoje 16h-18h</span>
+                            <span>✓ 3 itens</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 1 -->
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/100x100/E6F2FF/003366?text=Arroz" 
+                         alt="Arroz Integral" 
+                         class="item-image">
+                    <div class="item-details">
+                        <div class="item-brand">Marca Premium</div>
+                        <div class="item-title">Arroz Integral Tipo 1</div>
+                        <div class="item-meta">
+                            <span>5 kg</span>
+                            <span>•</span>
+                            <span>R$ 4,58/kg</span>
+                        </div>
+                        <div class="item-badges">
+                            <span class="badge substituted">🔄 Substituído</span>
+                        </div>
+                        <div class="item-notes">
+                            💡 Trocado por produto similar mais barato (economia de R$ 3,20)
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="item-price">
+                            <div class="old-price">R$ 26,10</div>
+                            <div class="current-price">R$ 22,90</div>
+                            <div class="unit-price">R$ 4,58/kg</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity(1, -1)" aria-label="Diminuir">−</button>
+                            <span class="qty-display" id="qty-1">1</span>
+                            <button class="qty-btn" onclick="updateQuantity(1, 1)" aria-label="Aumentar">+</button>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(1)" aria-label="Remover">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/100x100/E6F5E6/006633?text=Feij%C3%A3o" 
+                         alt="Feijão Preto" 
+                         class="item-image">
+                    <div class="item-details">
+                        <div class="item-brand">Marca Tradicional</div>
+                        <div class="item-title">Feijão Preto Tipo 1</div>
+                        <div class="item-meta">
+                            <span>1 kg</span>
+                            <span>•</span>
+                            <span>R$ 7,90/kg</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="item-price">
+                            <div class="current-price">R$ 7,90</div>
+                            <div class="unit-price">R$ 7,90/kg</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity(2, -1)">−</button>
+                            <span class="qty-display" id="qty-2">2</span>
+                            <button class="qty-btn" onclick="updateQuantity(2, 1)">+</button>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(2)">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/100x100/FFF3E0/F57C00?text=%C3%93leo" 
+                         alt="Óleo de Soja" 
+                         class="item-image">
+                    <div class="item-details">
+                        <div class="item-brand">Marca Líder</div>
+                        <div class="item-title">Óleo de Soja Refinado</div>
+                        <div class="item-meta">
+                            <span>900 ml</span>
+                            <span>•</span>
+                            <span>R$ 8,32/L</span>
+                        </div>
+                        <div class="item-badges">
+                            <span class="badge low-stock">⚠ Últimas unidades</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="item-price">
+                            <div class="current-price">R$ 7,49</div>
+                            <div class="unit-price">R$ 8,32/L</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity(3, -1)">−</button>
+                            <span class="qty-display" id="qty-3">1</span>
+                            <button class="qty-btn" onclick="updateQuantity(3, 1)">+</button>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(3)">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Store Notes -->
+                <div class="store-notes">
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--gray-700);">
+                        📝 Observações para esta loja:
+                    </label>
+                    <textarea placeholder="Ex: Entregar na portaria, ligar antes, etc."></textarea>
+                </div>
+
+                <!-- Store Totals -->
+                <div class="store-totals">
+                    <div class="total-row">
+                        <span class="total-label">Subtotal (3 itens)</span>
+                        <span class="total-value">R$ 46,19</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">Frete</span>
+                        <span class="total-value">Grátis</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">Descontos</span>
+                        <span class="total-value savings">- R$ 3,20</span>
+                    </div>
+                    <div class="total-row main">
+                        <span class="total-label">Total Mercado A</span>
+                        <span class="total-value">R$ 42,99</span>
+                    </div>
+                </div>
+
+                <div class="delivery-info">
+                    <strong>🚚 Entrega programada:</strong> Hoje, 16h-18h • Frete grátis acima de R$ 40
+                </div>
+            </section>
+
+            <!-- Store 2 -->
+            <section class="store-section">
+                <div class="store-header">
+                    <img src="https://via.placeholder.com/60x60/2196F3/FFFFFF?text=B" 
+                         alt="Mercado B" 
+                         class="store-logo">
+                    <div class="store-info">
+                        <h3>Supermercado Central B</h3>
+                        <div class="store-meta">
+                            <span>📍 2.5 km</span>
+                            <span>🚚 Entrega hoje 18h-20h</span>
+                            <span>✓ 2 itens</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/100x100/E3F2FD/2196F3?text=Leite" 
+                         alt="Leite Sem Lactose" 
+                         class="item-image">
+                    <div class="item-details">
+                        <div class="item-brand">Marca Zero Lactose</div>
+                        <div class="item-title">Leite UHT Integral Sem Lactose</div>
+                        <div class="item-meta">
+                            <span>1 L</span>
+                            <span>•</span>
+                            <span>R$ 5,49/L</span>
+                        </div>
+                        <div class="item-badges">
+                            <span class="badge reallocated">🔄 Realocado</span>
+                        </div>
+                        <div class="item-notes">
+                            💡 Produto indisponível na loja anterior, movido automaticamente
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="item-price">
+                            <div class="current-price">R$ 5,49</div>
+                            <div class="unit-price">R$ 5,49/L</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity(4, -1)">−</button>
+                            <span class="qty-display" id="qty-4">6</span>
+                            <button class="qty-btn" onclick="updateQuantity(4, 1)">+</button>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(4)">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/100x100/E8F5E9/4CAF50?text=Macarr%C3%A3o" 
+                         alt="Macarrão" 
+                         class="item-image">
+                    <div class="item-details">
+                        <div class="item-brand">Marca Italiana</div>
+                        <div class="item-title">Macarrão Espaguete</div>
+                        <div class="item-meta">
+                            <span>500 g</span>
+                            <span>•</span>
+                            <span>R$ 7,58/kg</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="item-price">
+                            <div class="current-price">R$ 3,79</div>
+                            <div class="unit-price">R$ 7,58/kg</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity(5, -1)">−</button>
+                            <span class="qty-display" id="qty-5">2</span>
+                            <button class="qty-btn" onclick="updateQuantity(5, 1)">+</button>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(5)">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Store Notes -->
+                <div class="store-notes">
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--gray-700);">
+                        📝 Observações para esta loja:
+                    </label>
+                    <textarea placeholder="Ex: Entregar na portaria, ligar antes, etc."></textarea>
+                </div>
+
+                <!-- Store Totals -->
+                <div class="store-totals">
+                    <div class="total-row">
+                        <span class="total-label">Subtotal (2 itens)</span>
+                        <span class="total-value">R$ 40,52</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">Frete</span>
+                        <span class="total-value">R$ 8,90</span>
+                    </div>
+                    <div class="total-row main">
+                        <span class="total-label">Total Mercado B</span>
+                        <span class="total-value">R$ 49,42</span>
+                    </div>
+                </div>
+
+                <div class="delivery-info">
+                    <strong>🚚 Entrega programada:</strong> Hoje, 18h-20h • Frete R$ 8,90
+                </div>
+            </section>
+
+            <!-- Store 3 -->
+            <section class="store-section">
+                <div class="store-header">
+                    <img src="https://via.placeholder.com/60x60/FF9800/FFFFFF?text=C" 
+                         alt="Mercado C" 
+                         class="store-logo">
+                    <div class="store-info">
+                        <h3>Atacadão do Bairro C</h3>
+                        <div class="store-meta">
+                            <span>📍 3.8 km</span>
+                            <span>🚚 Entrega amanhã 14h-16h</span>
+                            <span>✓ 2 itens</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minimum Order Alert -->
+                <div class="minimum-alert">
+                    <div class="icon">⚠️</div>
+                    <div class="minimum-alert-content">
+                        <h4>Valor Mínimo Não Atingido</h4>
+                        <p>Faltam R$ 12,80 para atingir o pedido mínimo de R$ 50,00 nesta loja.</p>
+                        <button class="btn-small" onclick="suggestItems()">Ver Sugestões de Produtos</button>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/100x100/FFF3E0/FF9800?text=Caf%C3%A9" 
+                         alt="Café" 
+                         class="item-image">
+                    <div class="item-details">
+                        <div class="item-brand">Marca Forte</div>
+                        <div class="item-title">Café Torrado e Moído</div>
+                        <div class="item-meta">
+                            <span>500 g</span>
+                            <span>•</span>
+                            <span>R$ 21,80/kg</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="item-price">
+                            <div class="current-price">R$ 10,90</div>
+                            <div class="unit-price">R$ 21,80/kg</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity(6, -1)">−</button>
+                            <span class="qty-display" id="qty-6">2</span>
+                            <button class="qty-btn" onclick="updateQuantity(6, 1)">+</button>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(6)">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/100x100/E1F5FE/0288D1?text=A%C3%A7%C3%BAcar" 
+                         alt="Açúcar" 
+                         class="item-image">
+                    <div class="item-details">
+                        <div class="item-brand">Marca Doce</div>
+                        <div class="item-title">Açúcar Cristal</div>
+                        <div class="item-meta">
+                            <span>5 kg</span>
+                            <span>•</span>
+                            <span>R$ 3,28/kg</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="item-price">
+                            <div class="current-price">R$ 16,40</div>
+                            <div class="unit-price">R$ 3,28/kg</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity(7, -1)">−</button>
+                            <span class="qty-display" id="qty-7">1</span>
+                            <button class="qty-btn" onclick="updateQuantity(7, 1)">+</button>
+                        </div>
+                        <button class="item-remove" onclick="removeItem(7)">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Store Notes -->
+                <div class="store-notes">
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--gray-700);">
+                        📝 Observações para esta loja:
+                    </label>
+                    <textarea placeholder="Ex: Entregar na portaria, ligar antes, etc."></textarea>
+                </div>
+
+                <!-- Store Totals -->
+                <div class="store-totals">
+                    <div class="total-row">
+                        <span class="total-label">Subtotal (2 itens)</span>
+                        <span class="total-value">R$ 37,20</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">Frete</span>
+                        <span class="total-value">R$ 12,90</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label" style="color: var(--warning);">⚠ Abaixo do mínimo</span>
+                        <span class="total-value" style="color: var(--warning);">-R$ 12,80</span>
+                    </div>
+                    <div class="total-row main">
+                        <span class="total-label">Total Mercado C</span>
+                        <span class="total-value">R$ 50,10</span>
+                    </div>
+                </div>
+
+                <div class="delivery-info">
+                    <strong>🚚 Entrega programada:</strong> Amanhã, 14h-16h • Frete R$ 12,90 • Mínimo R$ 50
+                </div>
+            </section>
+
+            <!-- Coupon Section -->
+            <section class="store-section coupon-section">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">🎟️ Cupom de Desconto</h3>
+                <div class="coupon-input-group">
+                    <input type="text" 
+                           class="coupon-input" 
+                           id="couponInput"
+                           placeholder="Digite seu cupom"
+                           aria-label="Código do cupom">
+                    <button class="btn-apply" onclick="applyCoupon()">Aplicar</button>
+                </div>
+                
+                <!-- Applied Coupon Example (hidden by default) -->
+                <div class="applied-coupon" id="appliedCoupon" style="display: none;">
+                    <div>
+                        <span class="code">PRIMEIRACOMPRA</span>
+                        <div style="font-size: 0.85rem; color: var(--gray-700);">
+                            10% de desconto aplicado
+                        </div>
+                    </div>
+                    <button class="btn-remove-coupon" onclick="removeCoupon()">✕</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Summary Sidebar -->
+        <aside class="summary-sidebar">
+            <!-- Price Lock Timer -->
+            <div class="price-lock">
+                <div style="font-size: 0.9rem; color: var(--gray-700);">⏰ Preços reservados por:</div>
+                <div class="timer" id="priceTimer">14:35</div>
+                <div class="message">Conclua sua compra para garantir estes preços</div>
+            </div>
+
+            <!-- Summary Card -->
+            <div class="summary-card">
+                <h3>💰 Resumo do Pedido</h3>
+
+                <!-- Comparison -->
+                <div class="summary-comparison">
+                    <div class="comparison-title">Comparação: 1 loja vs. 3 lojas</div>
+                    <div class="comparison-values">
+                        <div class="comparison-item">
+                            <div class="comparison-label">Uma loja</div>
+                            <div class="comparison-price single">R$ 160,91</div>
+                        </div>
+                        <div class="comparison-arrow">→</div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Multi-loja</div>
+                            <div class="comparison-price multi">R$ 142,51</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Economy Highlight -->
+                <div class="economy-highlight">
+                    <div class="amount">R$ 18,50</div>
+                    <div class="percentage">Você economiza 11,5%</div>
+                </div>
+
+                <!-- Breakdown -->
+                <div class="summary-breakdown">
+                    <div class="summary-row">
+                        <span>Subtotal (7 itens)</span>
+                        <span>R$ 123,91</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Fretes (3 lojas)</span>
+                        <span>R$ 21,80</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Descontos</span>
+                        <span style="color: var(--success);">-R$ 3,20</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span>R$ 142,51</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="proceedToCheckout()">
+                        <span>✓</span>
+                        <span>Finalizar Compra</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="continueShopping()">
+                        <span>←</span>
+                        <span>Continuar Comprando</span>
+                    </button>
+                </div>
+
+                <!-- Trust Indicators -->
+                <div class="trust-indicators">
+                    <div class="trust-item">
+                        <span class="icon">✓</span>
+                        <span>Compra 100% segura</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="icon">✓</span>
+                        <span>Entregas coordenadas</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="icon">✓</span>
+                        <span>Garantia de economia</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="icon">✓</span>
+                        <span>Devolução fácil</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Price Lock Timer
+        let timeRemaining = 875; // 14:35 in seconds
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('priceTimer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeRemaining > 0) {
+                timeRemaining--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                showToast('⚠️ Preços expirados. Atualizando carrinho...', 'error');
+                setTimeout(() => location.reload(), 2000);
+            }
+        }
+
+        updateTimer();
+
+        // Update Quantity
+        function updateQuantity(itemId, delta) {
+            const qtyDisplay = document.getElementById(`qty-${itemId}`);
+            let currentQty = parseInt(qtyDisplay.textContent);
+            currentQty += delta;
+            
+            if (currentQty < 1) currentQty = 1;
+            if (currentQty > 99) currentQty = 99;
+            
+            qtyDisplay.textContent = currentQty;
+            
+            // Simulate API call
+            console.log(`Updating item ${itemId} to quantity ${currentQty}`);
+            showToast('✓ Quantidade atualizada');
+            
+            // Recalculate totals (in real app)
+            setTimeout(() => {
+                // This would trigger a recalculation
+            }, 300);
+        }
+
+        // Remove Item
+        function removeItem(itemId) {
+            if (confirm('Deseja remover este item do carrinho?')) {
+                const items = document.querySelectorAll('.cart-item');
+                items[itemId - 1].style.animation = 'slideOut 0.3s ease-out';
+                
+                setTimeout(() => {
+                    items[itemId - 1].remove();
+                    showToast('✓ Item removido do carrinho');
+                    // Recalculate totals
+                }, 300);
+            }
+        }
+
+        // Apply Coupon
+        function applyCoupon() {
+            const couponInput = document.getElementById('couponInput');
+            const code = couponInput.value.trim().toUpperCase();
+            
+            if (!code) {
+                showToast('⚠️ Digite um código de cupom', 'error');
+                return;
+            }
+
+            // Simulate API validation
+            console.log('Validating coupon:', code);
+            
+            // Simulate success
+            setTimeout(() => {
+                document.getElementById('appliedCoupon').style.display = 'flex';
+                couponInput.value = '';
+                showToast('✓ Cupom aplicado com sucesso!', 'success');
+            }, 500);
+        }
+
+        // Remove Coupon
+        function removeCoupon() {
+            document.getElementById('appliedCoupon').style.display = 'none';
+            showToast('Cupom removido');
+        }
+
+        // Suggest Items
+        function suggestItems() {
+            showToast('💡 Abrindo sugestões de produtos...');
+            setTimeout(() => {
+                window.location.href = 'categoria.html?store=C&minOrder=true';
+            }, 1000);
+        }
+
+        // Proceed to Checkout
+        function proceedToCheckout() {
+            // Validate minimum orders
+            showToast('✓ Processando... Redirecionando para checkout');
+            
+            setTimeout(() => {
+                window.location.href = 'checkout.html';
+            }, 1500);
+        }
+
+        // Continue Shopping
+        function continueShopping() {
+            window.location.href = 'categoria.html';
+        }
+
+        // Show Toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toast.className = `toast ${type} show`;
+            toastMessage.textContent = message;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Telemetry
+        console.log('Telemetry: cart_viewed', {
+            cart_id: 'cart_7ab1',
+            items_count: 7,
+            stores_count: 3,
+            total_value: 142.51,
+            savings: 18.50,
+            timestamp: new Date().toISOString()
+        });
+
+        // Auto-save cart (debounced)
+        let saveTimeout;
+        function autoSaveCart() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                console.log('Auto-saving cart...');
+                // Make API call to save cart state
+            }, 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Cart page loaded');
+            
+            // Check for cart expiration
+            const cartExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+            console.log('Cart expires at:', cartExpiry);
+        });
+    </script>
+</body>
+</html>

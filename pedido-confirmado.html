@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido Confirmado - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #2563eb, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .order-number {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Success Banner */
+        .success-banner {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 0 0 16px 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .success-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Payment Section */
+        .payment-section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .payment-pending {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title-white {
+            color: white;
+        }
+
+        /* PIX QR Code */
+        .pix-container {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .qr-code-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: #f1f5f9;
+            border: 3px dashed #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .qr-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .pix-info {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .pix-copy-paste {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .pix-code {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #334155;
+            word-break: break-all;
+            margin-bottom: 10px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        .copy-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .copy-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .pix-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fef3c7;
+            padding: 12px;
+            border-radius: 8px;
+            color: #92400e;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .pix-instructions {
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .pix-instructions h4 {
+            color: #1e40af;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .pix-instructions ol {
+            margin-left: 20px;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        .pix-instructions li {
+            margin-bottom: 5px;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .summary-value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .total-row {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .total-row .summary-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .total-row .summary-value {
+            font-size: 20px;
+            color: #2563eb;
+        }
+
+        .economy-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        /* Stores */
+        .stores-section {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .store-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .store-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .store-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .store-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .store-status {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-preparing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-shipped {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .status-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .store-items {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .store-delivery {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .store-total {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 10px;
+        }
+
+        .track-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 12px;
+            transition: all 0.3s;
+        }
+
+        .track-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* Actions */
+        .actions-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-button {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .action-button:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        /* Footer Info */
+        .footer-info {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .footer-info p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .footer-info strong {
+            color: #1e293b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pix-container {
+                flex-direction: column;
+            }
+
+            .qr-code-box {
+                width: 100%;
+            }
+
+            .actions-section {
+                grid-template-columns: 1fr;
+            }
+
+            .success-title {
+                font-size: 22px;
+            }
+
+            .success-icon {
+                font-size: 48px;
+            }
+        }
+
+        /* Loading Animation */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">EconoFácil</div>
+            <div class="order-number">
+                <strong>Pedido #</strong> <span id="orderNumber">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Success Banner -->
+        <div class="success-banner" id="successBanner">
+            <div class="success-icon">✓</div>
+            <div class="success-title">Pedido Confirmado!</div>
+            <div class="success-subtitle">Seu pedido foi recebido e está sendo processado</div>
+        </div>
+
+        <!-- Payment Section (PIX) -->
+        <div class="payment-section payment-pending" id="pixSection" style="display: none;">
+            <div class="section-title section-title-white">
+                💳 Aguardando Pagamento PIX
+            </div>
+
+            <div class="pix-container">
+                <div class="qr-code-box">
+                    <div class="qr-code">
+                        <div>QR Code PIX</div>
+                    </div>
+                    <div class="qr-label">Escaneie com o app do seu banco</div>
+                </div>
+
+                <div class="pix-info">
+                    <div class="pix-timer">
+                        ⏱️ Expira em: <strong><span id="pixTimer">15:00</span></strong>
+                    </div>
+
+                    <div class="pix-copy-paste">
+                        <div class="pix-code" id="pixCode">
+                            00020126580014BR.GOV.BCB.PIX0136a629532e-7693-4846-852a-1c92a4784f655204000053039865802BR5913EconoFacil SA6009SAO PAULO62070503***63041D3D
+                        </div>
+                        <button class="copy-button" onclick="copyPixCode()">
+                            📋 Copiar código PIX
+                        </button>
+                    </div>
+
+                    <div class="pix-instructions">
+                        <h4>Como pagar:</h4>
+                        <ol>
+                            <li>Abra o app do seu banco</li>
+                            <li>Escolha "Pagar com PIX"</li>
+                            <li>Escaneie o QR Code ou cole o código</li>
+                            <li>Confirme o pagamento</li>
+                        </ol>
+                        <p style="margin-top: 10px; font-size: 12px;">
+                            <strong>Pagamento identificado automaticamente em até 2 segundos!</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <div class="section-title">📋 Resumo do Pedido</div>
+
+            <div class="summary-row">
+                <span class="summary-label">Subtotal (produtos)</span>
+                <span class="summary-value" id="subtotal">R$ 0,00</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Frete total</span>
+                <span class="summary-value" id="shipping">R$ 0,00</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Descontos</span>
+                <span class="summary-value" id="discounts" style="color: #10b981;">- R$ 0,00</span>
+            </div>
+            <div class="summary-row total-row">
+                <span class="summary-label">Valor Total</span>
+                <span class="summary-value" id="total">R$ 0,00</span>
+            </div>
+
+            <div class="economy-badge">
+                💰 Você economizou <strong id="economy">R$ 0,00</strong> comprando em múltiplas lojas!
+            </div>
+        </div>
+
+        <!-- Stores -->
+        <div class="stores-section">
+            <div class="section-title">🏪 Pedidos por Loja</div>
+            <div id="storesContainer">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-section">
+            <button class="action-button" onclick="viewReceipt()">
+                <div class="action-icon">🧾</div>
+                Ver Nota Fiscal
+            </button>
+            <button class="action-button" onclick="downloadReceipt()">
+                <div class="action-icon">📄</div>
+                Baixar Comprovante
+            </button>
+            <button class="action-button" onclick="shareOrder()">
+                <div class="action-icon">📤</div>
+                Compartilhar
+            </button>
+            <button class="action-button" onclick="contactSupport()">
+                <div class="action-icon">💬</div>
+                Suporte
+            </button>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="footer-info">
+            <p><strong>Dúvidas sobre seu pedido?</strong></p>
+            <p>Entre em contato: <strong>suporte@econofacil.com.br</strong> ou <strong>(11) 4002-8922</strong></p>
+            <p style="margin-top: 15px; font-size: 12px;">
+                <a href="pedidos.html" style="color: #2563eb; text-decoration: none; font-weight: 600;">
+                    ← Voltar para Meus Pedidos
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Mock Data - In production, fetch from API
+        const orderData = {
+            order_parent_id: 'ORD-2025-11-001234',
+            status: 'PAYMENT_PENDING', // PAYMENT_PENDING | PAID | PROCESSING | DELIVERED
+            payment_method: 'PIX',
+            subtotal: 287.90,
+            shipping: 24.50,
+            discounts: 18.40,
+            total: 294.00,
+            economy: 64.30,
+            created_at: '2025-11-07T14:30:00Z',
+            pix_code: '00020126580014BR.GOV.BCB.PIX0136a629532e-7693-4846-852a-1c92a4784f655204000053039865802BR5913EconoFacil SA6009SAO PAULO62070503***63041D3D',
+            pix_expires_at: '2025-11-07T14:45:00Z',
+            stores: [
+                {
+                    child_id: 'CHILD-001',
+                    store_name: 'Supermercado Pão de Açúcar',
+                    store_id: 'S1',
+                    status: 'PAID',
+                    items_count: 8,
+                    subtotal: 142.30,
+                    shipping: 12.00,
+                    total: 154.30,
+                    delivery_window: '2025-11-08 14:00 - 18:00',
+                    tracking_url: 'https://tracking.example.com/CHILD-001'
+                },
+                {
+                    child_id: 'CHILD-002',
+                    store_name: 'Carrefour Express',
+                    store_id: 'S2',
+                    status: 'PAYMENT_PENDING',
+                    items_count: 5,
+                    subtotal: 145.60,
+                    shipping: 12.50,
+                    total: 139.70,
+                    delivery_window: '2025-11-08 18:00 - 22:00',
+                    tracking_url: null
+                }
+            ]
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderData();
+            startPixTimer();
+            simulatePaymentCheck();
+        });
+
+        // Load order data
+        function loadOrderData() {
+            // Order number
+            document.getElementById('orderNumber').textContent = orderData.order_parent_id;
+
+            // Summary
+            document.getElementById('subtotal').textContent = formatCurrency(orderData.subtotal);
+            document.getElementById('shipping').textContent = formatCurrency(orderData.shipping);
+            document.getElementById('discounts').textContent = `- ${formatCurrency(orderData.discounts)}`;
+            document.getElementById('total').textContent = formatCurrency(orderData.total);
+            document.getElementById('economy').textContent = formatCurrency(orderData.economy);
+
+            // PIX section
+            if (orderData.payment_method === 'PIX' && orderData.status === 'PAYMENT_PENDING') {
+                document.getElementById('pixSection').style.display = 'block';
+                document.getElementById('pixCode').textContent = orderData.pix_code;
+            }
+
+            // Success banner state
+            updateSuccessBanner();
+
+            // Stores
+            renderStores();
+
+            // Telemetry
+            console.log('Telemetry: order_confirmation_viewed', {
+                order_id: orderData.order_parent_id,
+                payment_method: orderData.payment_method,
+                total: orderData.total,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Update success banner based on status
+        function updateSuccessBanner() {
+            const banner = document.getElementById('successBanner');
+            const icon = banner.querySelector('.success-icon');
+            const title = banner.querySelector('.success-title');
+            const subtitle = banner.querySelector('.success-subtitle');
+
+            if (orderData.status === 'PAYMENT_PENDING') {
+                icon.textContent = '⏳';
+                title.textContent = 'Aguardando Pagamento';
+                subtitle.textContent = 'Complete o pagamento para confirmar seu pedido';
+            } else if (orderData.status === 'PAID') {
+                icon.textContent = '✓';
+                title.textContent = 'Pedido Confirmado!';
+                subtitle.textContent = 'Pagamento aprovado! Seu pedido está sendo preparado';
+            } else if (orderData.status === 'PROCESSING') {
+                icon.textContent = '📦';
+                title.textContent = 'Pedido em Preparação';
+                subtitle.textContent = 'Suas lojas estão separando os produtos';
+            } else if (orderData.status === 'DELIVERED') {
+                icon.textContent = '🎉';
+                title.textContent = 'Pedido Entregue!';
+                subtitle.textContent = 'Obrigado por comprar com o EconoFácil';
+            }
+        }
+
+        // Render stores
+        function renderStores() {
+            const container = document.getElementById('storesContainer');
+            container.innerHTML = '';
+
+            orderData.stores.forEach(store => {
+                const statusClass = getStatusClass(store.status);
+                const statusText = getStatusText(store.status);
+
+                const card = document.createElement('div');
+                card.className = 'store-card';
+                card.innerHTML = `
+                    <div class="store-header">
+                        <div class="store-name">${store.store_name}</div>
+                        <div class="store-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="store-items">
+                        📦 ${store.items_count} ${store.items_count === 1 ? 'item' : 'itens'}
+                    </div>
+                    <div class="store-delivery">
+                        🚚 Entrega prevista: ${store.delivery_window}
+                    </div>
+                    <div class="store-total">
+                        Total: ${formatCurrency(store.total)}
+                    </div>
+                    ${store.tracking_url ? `
+                        <button class="track-button" onclick="trackOrder('${store.child_id}')">
+                            🔍 Rastrear Entrega
+                        </button>
+                    ` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Get status CSS class
+        function getStatusClass(status) {
+            const classes = {
+                'PAYMENT_PENDING': 'status-pending',
+                'PAID': 'status-paid',
+                'PROCESSING': 'status-preparing',
+                'PICKED': 'status-preparing',
+                'IN_TRANSIT': 'status-shipped',
+                'OUT_FOR_DELIVERY': 'status-shipped',
+                'DELIVERED': 'status-delivered'
+            };
+            return classes[status] || 'status-pending';
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            const texts = {
+                'PAYMENT_PENDING': 'Aguardando Pagamento',
+                'PAID': 'Pago',
+                'PROCESSING': 'Preparando',
+                'PICKED': 'Separado',
+                'IN_TRANSIT': 'Em Trânsito',
+                'OUT_FOR_DELIVERY': 'Saiu para Entrega',
+                'DELIVERED': 'Entregue'
+            };
+            return texts[status] || 'Pendente';
+        }
+
+        // PIX Timer
+        function startPixTimer() {
+            if (orderData.payment_method !== 'PIX' || orderData.status !== 'PAYMENT_PENDING') return;
+
+            const expiresAt = new Date(orderData.pix_expires_at);
+            
+            const interval = setInterval(() => {
+                const now = new Date();
+                const diff = expiresAt - now;
+
+                if (diff <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('pixTimer').textContent = '00:00';
+                    showToast('O código PIX expirou. Gere um novo código.', 'error');
+                    return;
+                }
+
+                const minutes = Math.floor(diff / 60000);
+                const seconds = Math.floor((diff % 60000) / 1000);
+                document.getElementById('pixTimer').textContent = 
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Copy PIX code
+        function copyPixCode() {
+            const code = document.getElementById('pixCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Código PIX copiado! Cole no seu app de pagamento.', 'success');
+                
+                // Telemetry
+                console.log('Telemetry: pix_code_copied', {
+                    order_id: orderData.order_parent_id,
+                    timestamp: new Date().toISOString()
+                });
+            }).catch(err => {
+                showToast('Erro ao copiar código. Tente novamente.', 'error');
+            });
+        }
+
+        // Simulate payment check (webhook simulation)
+        function simulatePaymentCheck() {
+            if (orderData.status === 'PAYMENT_PENDING' && orderData.payment_method === 'PIX') {
+                // In production, this would be a real webhook
+                setTimeout(() => {
+                    // Simulate payment received
+                    console.log('Simulating PIX payment received...');
+                    // Would call: checkPaymentStatus()
+                }, 30000); // Check after 30 seconds
+            }
+        }
+
+        // Track order
+        function trackOrder(childId) {
+            console.log('Tracking order:', childId);
+            const store = orderData.stores.find(s => s.child_id === childId);
+            if (store && store.tracking_url) {
+                window.location.href = `pedidos.html?tracking=${childId}`;
+            }
+        }
+
+        // View receipt
+        function viewReceipt() {
+            console.log('Viewing receipt');
+            showToast('Abrindo nota fiscal...', 'success');
+            // window.open(`/receipts/${orderData.order_parent_id}`, '_blank');
+        }
+
+        // Download receipt
+        function downloadReceipt() {
+            console.log('Downloading receipt');
+            showToast('Baixando comprovante...', 'success');
+            // Trigger download
+        }
+
+        // Share order
+        function shareOrder() {
+            const shareText = `Comprei no EconoFácil e economizei ${formatCurrency(orderData.economy)}! Pedido: ${orderData.order_parent_id}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Meu Pedido EconoFácil',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText);
+                showToast('Link copiado para compartilhar!', 'success');
+            }
+        }
+
+        // Contact support
+        function contactSupport() {
+            console.log('Contacting support');
+            showToast('Abrindo chat de suporte...', 'success');
+            // Open support chat
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

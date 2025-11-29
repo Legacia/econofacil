@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Recupere sua senha do EconoFácil">
+    <title>Recuperar Senha - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #4CAF50;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --bg-light: #FAFAFA;
+            --white: #FFFFFF;
+            --border-color: #E0E0E0;
+            --error-color: #F44336;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --info-color: #2196F3;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .reset-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 480px;
+            padding: 2.5rem;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo a {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .icon-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-large {
+            font-size: 4rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 1.75rem;
+            color: var(--text-dark);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--primary-color);
+        }
+
+        .step.completed {
+            background: var(--success-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        input.error {
+            border-color: var(--error-color);
+        }
+
+        input.success {
+            border-color: var(--success-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: var(--text-light);
+            padding: 0.25rem;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .strength-bars {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            flex: 1;
+            background: var(--border-color);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-bar.active {
+            background: var(--error-color);
+        }
+
+        .strength-bar.active.medium {
+            background: var(--warning-color);
+        }
+
+        .strength-bar.active.strong {
+            background: var(--success-color);
+        }
+
+        .strength-text {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.875rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert.show {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .alert-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 1px solid #4CAF50;
+        }
+
+        .alert-error {
+            background: #FFEBEE;
+            color: #C62828;
+            border: 1px solid #F44336;
+        }
+
+        .alert-info {
+            background: #E3F2FD;
+            color: #1565C0;
+            border: 1px solid #2196F3;
+        }
+
+        .alert-warning {
+            background: #FFF3E0;
+            color: #E65100;
+            border: 1px solid #FF9800;
+        }
+
+        .info-box {
+            background: var(--bg-light);
+            border-left: 4px solid var(--info-color);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .info-box-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .back-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--white);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Rate limit warning */
+        .rate-limit-warning {
+            background: #FFF3E0;
+            border: 1px solid #FF9800;
+            color: #E65100;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .reset-container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reset-container">
+        <div class="logo">
+            <a href="index.html">
+                <span>🛒</span> Econo<span>Fácil</span>
+            </a>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step active" id="step1"></div>
+            <div class="step" id="step2"></div>
+            <div class="step" id="step3"></div>
+        </div>
+
+        <!-- Alert Container -->
+        <div id="alertContainer"></div>
+
+        <!-- Step 1: Request Reset -->
+        <div id="requestStep">
+            <div class="icon-container">
+                <div class="icon-large">🔒</div>
+            </div>
+
+            <h1>Esqueceu sua senha?</h1>
+            <p class="subtitle">
+                Não se preocupe! Digite seu e-mail e enviaremos as instruções para redefinir sua senha.
+            </p>
+
+            <form id="requestForm" novalidate>
+                <div class="form-group">
+                    <label for="email">E-mail cadastrado</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email"
+                        placeholder="seu@email.com"
+                        required
+                        autocomplete="email"
+                        aria-describedby="emailError"
+                    >
+                    <div class="error-message" id="emailError" role="alert"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="requestBtn">
+                    Enviar instruções
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="login.html">← Voltar para o login</a>
+            </div>
+        </div>
+
+        <!-- Step 2: Email Sent Confirmation -->
+        <div id="emailSentStep" class="hidden">
+            <div class="icon-container">
+                <div class="icon-large">📧</div>
+            </div>
+
+            <h1>Verifique seu e-mail</h1>
+            <p class="subtitle">
+                Se o e-mail <strong id="emailSent"></strong> estiver cadastrado, você receberá as instruções para redefinir sua senha.
+            </p>
+
+            <div class="info-box">
+                <div class="info-box-title">📌 Importante:</div>
+                <div class="info-box-text">
+                    • O link expira em <strong>30 minutos</strong><br>
+                    • Verifique sua caixa de spam<br>
+                    • Não recebeu? Tente solicitar novamente em alguns minutos
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" id="backToLoginBtn">
+                Voltar para o login
+            </button>
+
+            <div class="back-link">
+                <a href="#" id="resendLink">Reenviar e-mail</a>
+            </div>
+        </div>
+
+        <!-- Step 3: Reset Password Form -->
+        <div id="resetStep" class="hidden">
+            <div class="icon-container">
+                <div class="icon-large">🔑</div>
+            </div>
+
+            <h1>Nova senha</h1>
+            <p class="subtitle">
+                Crie uma senha forte para proteger sua conta.
+            </p>
+
+            <form id="resetForm" novalidate>
+                <div class="form-group">
+                    <label for="newPassword">Nova senha</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="password" 
+                            id="newPassword" 
+                            name="newPassword"
+                            placeholder="Digite sua nova senha"
+                            required
+                            autocomplete="new-password"
+                            aria-describedby="newPasswordError passwordStrength"
+                        >
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            id="toggleNewPassword"
+                            aria-label="Mostrar/ocultar senha"
+                        >
+                            👁️
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bars">
+                            <div class="strength-bar" data-strength="1"></div>
+                            <div class="strength-bar" data-strength="2"></div>
+                            <div class="strength-bar" data-strength="3"></div>
+                            <div class="strength-bar" data-strength="4"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText"></div>
+                    </div>
+                    <div class="error-message" id="newPasswordError" role="alert"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar nova senha</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword"
+                            placeholder="Digite a senha novamente"
+                            required
+                            autocomplete="new-password"
+                            aria-describedby="confirmPasswordError"
+                        >
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            id="toggleConfirmPassword"
+                            aria-label="Mostrar/ocultar confirmação de senha"
+                        >
+                            👁️
+                        </button>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError" role="alert"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="resetBtn">
+                    Redefinir senha
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 4: Success -->
+        <div id="successStep" class="hidden">
+            <div class="icon-container">
+                <div class="icon-large">✅</div>
+            </div>
+
+            <h1>Senha alterada!</h1>
+            <p class="subtitle">
+                Sua senha foi redefinida com sucesso. Use sua nova senha para fazer login.
+            </p>
+
+            <button class="btn btn-primary" id="goToLoginBtn">
+                Ir para o login
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Estado da aplicação
+        let currentStep = 1;
+        let resetToken = null;
+        let userEmail = '';
+        let isSubmitting = false;
+        let attemptCount = 0;
+        const MAX_ATTEMPTS = 3;
+
+        // Elementos do DOM
+        const requestStep = document.getElementById('requestStep');
+        const emailSentStep = document.getElementById('emailSentStep');
+        const resetStep = document.getElementById('resetStep');
+        const successStep = document.getElementById('successStep');
+        const alertContainer = document.getElementById('alertContainer');
+
+        // Verificar se há token na URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const tokenFromUrl = urlParams.get('token');
+
+        if (tokenFromUrl) {
+            resetToken = tokenFromUrl;
+            showStep(3);
+        }
+
+        // Navegação entre steps
+        function showStep(step) {
+            currentStep = step;
+
+            // Ocultar todos os steps
+            requestStep.classList.add('hidden');
+            emailSentStep.classList.add('hidden');
+            resetStep.classList.add('hidden');
+            successStep.classList.add('hidden');
+
+            // Atualizar indicadores
+            document.getElementById('step1').classList.remove('active', 'completed');
+            document.getElementById('step2').classList.remove('active', 'completed');
+            document.getElementById('step3').classList.remove('active', 'completed');
+
+            // Mostrar step atual
+            switch(step) {
+                case 1:
+                    requestStep.classList.remove('hidden');
+                    document.getElementById('step1').classList.add('active');
+                    break;
+                case 2:
+                    emailSentStep.classList.remove('hidden');
+                    document.getElementById('step1').classList.add('completed');
+                    document.getElementById('step2').classList.add('active');
+                    break;
+                case 3:
+                    resetStep.classList.remove('hidden');
+                    document.getElementById('step1').classList.add('completed');
+                    document.getElementById('step2').classList.add('completed');
+                    document.getElementById('step3').classList.add('active');
+                    break;
+                case 4:
+                    successStep.classList.remove('hidden');
+                    document.getElementById('step1').classList.add('completed');
+                    document.getElementById('step2').classList.add('completed');
+                    document.getElementById('step3').classList.add('completed');
+                    break;
+            }
+
+            trackEvent('password_reset_step_viewed', { step });
+        }
+
+        // Mostrar alerta
+        function showAlert(message, type = 'error', icon = '⚠️') {
+            const icons = {
+                success: '✅',
+                error: '❌',
+                info: 'ℹ️',
+                warning: '⚠️'
+            };
+
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} show">
+                    <div class="alert-icon">${icons[type] || icon}</div>
+                    <div class="alert-content">${message}</div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Validações
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            const checks = {
+                length: password.length >= 10,
+                lowercase: /[a-z]/.test(password),
+                uppercase: /[A-Z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            };
+
+            if (checks.length) strength++;
+            if (checks.lowercase) strength++;
+            if (checks.uppercase) strength++;
+            if (checks.number) strength++;
+            if (checks.special) strength++;
+
+            return { strength, checks };
+        }
+
+        function validatePassword(password) {
+            const { strength, checks } = checkPasswordStrength(password);
+            return checks.length && checks.lowercase && checks.uppercase && 
+                   checks.number && checks.special && strength >= 4;
+        }
+
+        // Mostrar/limpar erro
+        function showError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorDiv = document.getElementById(inputId + 'Error');
+            
+            input.classList.add('error');
+            input.classList.remove('success');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        function clearError(inputId) {
+            const input = document.getElementById(inputId);
+            const errorDiv = document.getElementById(inputId + 'Error');
+            
+            input.classList.remove('error');
+            errorDiv.classList.remove('show');
+        }
+
+        function showSuccess(inputId) {
+            const input = document.getElementById(inputId);
+            input.classList.add('success');
+            input.classList.remove('error');
+        }
+
+        // Telemetria
+        function trackEvent(eventName, data = {}) {
+            console.log('Event:', eventName, {
+                ...data,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // === STEP 1: Request Reset ===
+        const requestForm = document.getElementById('requestForm');
+        const emailInput = document.getElementById('email');
+        const requestBtn = document.getElementById('requestBtn');
+
+        requestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (isSubmitting) return;
+
+            const email = emailInput.value.trim();
+
+            // Validar e-mail
+            if (!email) {
+                showError('email', 'Por favor, informe seu e-mail');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showError('email', 'Por favor, informe um e-mail válido');
+                return;
+            }
+
+            // Rate limiting
+            attemptCount++;
+            if (attemptCount > MAX_ATTEMPTS) {
+                showAlert(
+                    'Você excedeu o número máximo de tentativas. Por favor, aguarde alguns minutos antes de tentar novamente.',
+                    'warning'
+                );
+                return;
+            }
+
+            isSubmitting = true;
+            requestBtn.disabled = true;
+            requestBtn.innerHTML = '<span class="loading-spinner"></span> Enviando...';
+
+            try {
+                trackEvent('password_reset_requested', { email });
+
+                // Simular chamada de API: POST /auth/forgot-password
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                userEmail = email;
+                document.getElementById('emailSent').textContent = email;
+
+                trackEvent('password_reset_email_sent', { email });
+
+                showStep(2);
+
+            } catch (error) {
+                trackEvent('password_reset_request_failed', { email, error: error.message });
+                showAlert('Erro ao processar sua solicitação. Tente novamente.', 'error');
+            } finally {
+                isSubmitting = false;
+                requestBtn.disabled = false;
+                requestBtn.textContent = 'Enviar instruções';
+            }
+        });
+
+        emailInput.addEventListener('input', () => clearError('email'));
+
+        // === STEP 2: Email Sent ===
+        document.getElementById('backToLoginBtn').addEventListener('click', () => {
+            window.location.href = 'login.html';
+        });
+
+        document.getElementById('resendLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            if (attemptCount >= MAX_ATTEMPTS) {
+                showAlert('Aguarde alguns minutos antes de solicitar novamente.', 'warning');
+                return;
+            }
+
+            showStep(1);
+            emailInput.value = userEmail;
+            showAlert('Você pode solicitar o envio novamente.', 'info');
+        });
+
+        // === STEP 3: Reset Password ===
+        const resetForm = document.getElementById('resetForm');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const resetBtn = document.getElementById('resetBtn');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const strengthText = document.getElementById('strengthText');
+
+        // Toggle password visibility
+        document.getElementById('toggleNewPassword').addEventListener('click', () => {
+            const type = newPasswordInput.type === 'password' ? 'text' : 'password';
+            newPasswordInput.type = type;
+            document.getElementById('toggleNewPassword').textContent = type === 'password' ? '👁️' : '🙈';
+        });
+
+        document.getElementById('toggleConfirmPassword').addEventListener('click', () => {
+            const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+            confirmPasswordInput.type = type;
+            document.getElementById('toggleConfirmPassword').textContent = type === 'password' ? '👁️' : '🙈';
+        });
+
+        // Password strength indicator
+        newPasswordInput.addEventListener('input', () => {
+            const password = newPasswordInput.value;
+            clearError('newPassword');
+            
+            if (password.length === 0) {
+                passwordStrength.classList.remove('show');
+                return;
+            }
+
+            passwordStrength.classList.add('show');
+            const { strength, checks } = checkPasswordStrength(password);
+
+            // Update bars
+            document.querySelectorAll('.strength-bar').forEach((bar, index) => {
+                bar.classList.remove('active', 'medium', 'strong');
+                if (index < strength) {
+                    bar.classList.add('active');
+                    if (strength >= 3) bar.classList.add('medium');
+                    if (strength >= 4) bar.classList.add('strong');
+                }
+            });
+
+            // Update text
+            const messages = ['Muito fraca', 'Fraca', 'Razoável', 'Boa', 'Muito forte'];
+            strengthText.textContent = messages[strength - 1] || 'Muito fraca';
+
+            // Show requirements
+            const requirements = [];
+            if (!checks.length) requirements.push('mínimo 10 caracteres');
+            if (!checks.lowercase) requirements.push('uma letra minúscula');
+            if (!checks.uppercase) requirements.push('uma letra MAIÚSCULA');
+            if (!checks.number) requirements.push('um número');
+            if (!checks.special) requirements.push('um caractere especial');
+
+            if (requirements.length > 0) {
+                strengthText.textContent += ' - Adicione: ' + requirements.join(', ');
+            }
+        });
+
+        confirmPasswordInput.addEventListener('input', () => clearError('confirmPassword'));
+
+        resetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (isSubmitting) return;
+
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // Validações
+            let isValid = true;
+
+            if (!newPassword) {
+                showError('newPassword', 'Por favor, crie uma nova senha');
+                isValid = false;
+            } else if (!validatePassword(newPassword)) {
+                showError('newPassword', 'A senha não atende aos requisitos mínimos de segurança');
+                isValid = false;
+            } else {
+                showSuccess('newPassword');
+            }
+
+            if (!confirmPassword) {
+                showError('confirmPassword', 'Por favor, confirme sua senha');
+                isValid = false;
+            } else if (newPassword !== confirmPassword) {
+                showError('confirmPassword', 'As senhas não coincidem');
+                isValid = false;
+            } else {
+                showSuccess('confirmPassword');
+            }
+
+            if (!isValid) return;
+
+            isSubmitting = true;
+            resetBtn.disabled = true;
+            resetBtn.innerHTML = '<span class="loading-spinner"></span> Redefinindo...';
+
+            try {
+                trackEvent('password_reset_attempt', { hasToken: !!resetToken });
+
+                // Simular chamada de API: POST /auth/reset-password
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Simular validação do token
+                if (!resetToken) {
+                    throw new Error('Token inválido ou expirado');
+                }
+
+                trackEvent('password_reset_success');
+
+                showStep(4);
+
+            } catch (error) {
+                trackEvent('password_reset_failed', { error: error.message });
+                
+                if (error.message.includes('Token')) {
+                    showAlert(
+                        'Link de recuperação inválido ou expirado. Solicite um novo link.',
+                        'error'
+                    );
+                    setTimeout(() => {
+                        showStep(1);
+                    }, 3000);
+                } else {
+                    showAlert('Erro ao redefinir senha. Tente novamente.', 'error');
+                }
+            } finally {
+                isSubmitting = false;
+                resetBtn.disabled = false;
+                resetBtn.textContent = 'Redefinir senha';
+            }
+        });
+
+        // === STEP 4: Success ===
+        document.getElementById('goToLoginBtn').addEventListener('click', () => {
+            window.location.href = 'login.html?message=senha_alterada';
+        });
+
+        // Track page view
+        trackEvent('password_reset_page_viewed');
+    </script>
+</body>
+</html>

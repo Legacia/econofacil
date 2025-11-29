@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #003366;
+            --primary-green: #006633;
+            --light-blue: #E6F2FF;
+            --light-green: #E6F5E6;
+            --white: #FFFFFF;
+            --gray-100: #F5F5F5;
+            --gray-200: #E0E0E0;
+            --gray-300: #BDBDBD;
+            --gray-700: #424242;
+            --gray-900: #212121;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --info: #2196F3;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
+            min-height: 100vh;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            right: -50%;
+            height: 3px;
+            background: var(--gray-200);
+            z-index: 0;
+        }
+
+        .progress-step:last-child::before {
+            display: none;
+        }
+
+        .progress-step.active::before,
+        .progress-step.completed::before {
+            background: var(--primary-green);
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary-blue);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Main Content */
+        .checkout-main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .section-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .btn-edit {
+            background: none;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-edit:hover {
+            background: var(--light-blue);
+        }
+
+        /* Address Section */
+        .address-card {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .address-card strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+        }
+
+        .address-card p {
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .address-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .address-option {
+            padding: 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .address-option:hover {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .address-option.selected {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        /* Delivery Windows */
+        .delivery-windows {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .store-delivery {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .store-delivery-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .store-logo-small {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            padding: 0.25rem;
+        }
+
+        .window-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .window-option {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .window-option:hover {
+            border-color: var(--primary-blue);
+        }
+
+        .window-option.selected {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .window-option strong {
+            display: block;
+            color: var(--primary-blue);
+            margin-bottom: 0.25rem;
+        }
+
+        .window-option .time {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-method {
+            padding: 1.5rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .payment-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-info strong {
+            display: block;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-info .description {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .payment-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .payment-badge.instant {
+            background: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        .payment-badge.cashback {
+            background: #FFF3E0;
+            color: var(--warning);
+        }
+
+        /* Card Details Form */
+        .card-form {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .card-form.active {
+            display: grid;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        /* Saved Cards */
+        .saved-cards {
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .saved-cards.active {
+            display: flex;
+        }
+
+        .saved-card {
+            padding: 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .saved-card:hover {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .saved-card.selected {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .card-brand {
+            width: 48px;
+            height: 32px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        /* Terms */
+        .terms-checkbox {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: 8px;
+        }
+
+        .terms-checkbox input[type="checkbox"] {
+            margin-top: 0.25rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .terms-checkbox label {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .terms-checkbox a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+
+        /* Summary Sidebar */
+        .summary-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Order Items Summary */
+        .order-items {
+            margin-bottom: 1rem;
+        }
+
+        .order-store {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .order-store:last-child {
+            border-bottom: none;
+        }
+
+        .store-name {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .item-summary {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            margin: 0.25rem 0;
+        }
+
+        /* Price Breakdown */
+        .price-breakdown {
+            margin: 1.5rem 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .price-row.total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            border-top: 2px solid var(--primary-blue);
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+
+        .price-value.savings {
+            color: var(--success);
+        }
+
+        /* Economy Box */
+        .economy-box {
+            background: linear-gradient(135deg, var(--success), #66BB6A);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .economy-box .amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .economy-box .description {
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        /* Security Badges */
+        .security-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 1rem;
+        }
+
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .security-item .icon {
+            color: var(--success);
+            font-size: 1.1rem;
+        }
+
+        /* Action Button */
+        .btn-finalize {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-finalize:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-finalize:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .alert.warning {
+            background: #FFF3E0;
+            border-left: 4px solid var(--warning);
+        }
+
+        .alert.info {
+            background: #E3F2FD;
+            border-left: 4px solid var(--info);
+        }
+
+        .alert .icon {
+            font-size: 1.5rem;
+        }
+
+        .alert .content {
+            flex: 1;
+        }
+
+        .alert strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid var(--gray-200);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .section-card {
+                padding: 1.5rem;
+            }
+
+            .progress-content {
+                overflow-x: auto;
+            }
+
+            .card-form {
+                grid-template-columns: 1fr;
+            }
+
+            .window-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span>🛒</span>
+                <span>EconoFácil</span>
+            </a>
+            <div style="color: white; font-size: 0.9rem;">
+                🔒 Checkout Seguro
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-content">
+            <div class="progress-step completed">
+                <div class="step-circle">✓</div>
+                <div class="step-label">Carrinho</div>
+            </div>
+            <div class="progress-step active">
+                <div class="step-circle">2</div>
+                <div class="step-label">Endereço</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Entrega</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">4</div>
+                <div class="step-label">Pagamento</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">5</div>
+                <div class="step-label">Confirmação</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Checkout Main -->
+        <div class="checkout-main">
+            <!-- 1. Address Section -->
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-number">1</span>
+                        <span>Endereço de Entrega</span>
+                    </div>
+                    <button class="btn-edit" onclick="editAddress()">Editar</button>
+                </div>
+
+                <div class="address-card">
+                    <strong>📍 Endereço Principal</strong>
+                    <p>
+                        Rua das Flores, 123 - Apto 45<br>
+                        Jardim Primavera<br>
+                        São Paulo - SP, 01234-567<br>
+                        Próximo ao mercado São João
+                    </p>
+                </div>
+
+                <div class="alert info" style="margin-top: 1rem;">
+                    <div class="icon">ℹ️</div>
+                    <div class="content">
+                        <strong>Área de Cobertura Confirmada</strong>
+                        <p>Todas as 3 lojas selecionadas entregam no seu endereço</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Delivery Windows Section -->
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-number">2</span>
+                        <span>Janelas de Entrega</span>
+                    </div>
+                </div>
+
+                <div class="alert info">
+                    <div class="icon">🚚</div>
+                    <div class="content">
+                        <strong>Entregas Coordenadas</strong>
+                        <p>Todas as entregas chegam no mesmo dia para sua comodidade!</p>
+                    </div>
+                </div>
+
+                <div class="delivery-windows">
+                    <!-- Store A -->
+                    <div class="store-delivery">
+                        <div class="store-delivery-header">
+                            <img src="https://via.placeholder.com/40x40/4CAF50/FFFFFF?text=A" 
+                                 alt="Mercado A" 
+                                 class="store-logo-small">
+                            <strong>Mercado Econômico A</strong>
+                        </div>
+                        <div class="window-options">
+                            <div class="window-option selected" onclick="selectWindow(this, 'A', 1)">
+                                <strong>Hoje</strong>
+                                <div class="time">16h - 18h</div>
+                            </div>
+                            <div class="window-option" onclick="selectWindow(this, 'A', 2)">
+                                <strong>Hoje</strong>
+                                <div class="time">18h - 20h</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Store B -->
+                    <div class="store-delivery">
+                        <div class="store-delivery-header">
+                            <img src="https://via.placeholder.com/40x40/2196F3/FFFFFF?text=B" 
+                                 alt="Mercado B" 
+                                 class="store-logo-small">
+                            <strong>Supermercado Central B</strong>
+                        </div>
+                        <div class="window-options">
+                            <div class="window-option selected" onclick="selectWindow(this, 'B', 1)">
+                                <strong>Hoje</strong>
+                                <div class="time">16h - 18h</div>
+                            </div>
+                            <div class="window-option" onclick="selectWindow(this, 'B', 2)">
+                                <strong>Hoje</strong>
+                                <div class="time">18h - 20h</div>
+                            </div>
+                            <div class="window-option" onclick="selectWindow(this, 'B', 3)">
+                                <strong>Amanhã</strong>
+                                <div class="time">14h - 16h</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Store C -->
+                    <div class="store-delivery">
+                        <div class="store-delivery-header">
+                            <img src="https://via.placeholder.com/40x40/FF9800/FFFFFF?text=C" 
+                                 alt="Mercado C" 
+                                 class="store-logo-small">
+                            <strong>Atacadão do Bairro C</strong>
+                        </div>
+                        <div class="window-options">
+                            <div class="window-option selected" onclick="selectWindow(this, 'C', 1)">
+                                <strong>Hoje</strong>
+                                <div class="time">16h - 18h</div>
+                            </div>
+                            <div class="window-option" onclick="selectWindow(this, 'C', 2)">
+                                <strong>Amanhã</strong>
+                                <div class="time">10h - 12h</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Payment Method Section -->
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-number">3</span>
+                        <span>Forma de Pagamento</span>
+                    </div>
+                </div>
+
+                <div class="payment-methods">
+                    <!-- PIX -->
+                    <div class="payment-method selected" onclick="selectPayment(this, 'pix')">
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-info">
+                            <strong>PIX</strong>
+                            <div class="description">Aprovação instantânea</div>
+                        </div>
+                        <div class="payment-badge instant">Instantâneo</div>
+                    </div>
+
+                    <!-- Credit Card -->
+                    <div class="payment-method" onclick="selectPayment(this, 'card')">
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-info">
+                            <strong>Cartão de Crédito</strong>
+                            <div class="description">Parcelamento em até 12x</div>
+                        </div>
+                    </div>
+
+                    <!-- Saved Cards -->
+                    <div class="saved-cards" id="savedCards">
+                        <div class="saved-card selected" onclick="selectSavedCard(this)">
+                            <div class="card-brand">VISA</div>
+                            <div>
+                                <strong>•••• 1234</strong>
+                                <div style="font-size: 0.85rem; color: var(--gray-700);">Validade: 12/2030</div>
+                            </div>
+                        </div>
+                        <div class="saved-card" onclick="selectSavedCard(this)">
+                            <div class="card-brand">MASTER</div>
+                            <div>
+                                <strong>•••• 5678</strong>
+                                <div style="font-size: 0.85rem; color: var(--gray-700);">Validade: 06/2028</div>
+                            </div>
+                        </div>
+                        <button class="btn-edit" style="margin-top: 0.5rem;" onclick="showNewCard()">
+                            + Adicionar Novo Cartão
+                        </button>
+                    </div>
+
+                    <!-- New Card Form -->
+                    <div class="card-form" id="cardForm">
+                        <div class="form-group full-width">
+                            <label>Número do Cartão</label>
+                            <input type="text" 
+                                   placeholder="1234 5678 9012 3456" 
+                                   maxlength="19"
+                                   id="cardNumber">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Nome no Cartão</label>
+                            <input type="text" 
+                                   placeholder="Como está impresso no cartão"
+                                   id="cardName">
+                        </div>
+                        <div class="form-group">
+                            <label>Validade</label>
+                            <input type="text" 
+                                   placeholder="MM/AA"
+                                   maxlength="5"
+                                   id="cardExpiry">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" 
+                                   placeholder="123"
+                                   maxlength="4"
+                                   id="cardCvv">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Parcelas</label>
+                            <select id="installments">
+                                <option value="1">1x de R$ 142,51 sem juros</option>
+                                <option value="2">2x de R$ 71,26 sem juros</option>
+                                <option value="3">3x de R$ 47,50 sem juros</option>
+                                <option value="6">6x de R$ 24,18 com juros</option>
+                                <option value="12">12x de R$ 12,92 com juros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- EconoPay -->
+                    <div class="payment-method" onclick="selectPayment(this, 'econopay')">
+                        <div class="payment-icon">💰</div>
+                        <div class="payment-info">
+                            <strong>EconoPay (Carteira Digital)</strong>
+                            <div class="description">Saldo disponível: R$ 27,35</div>
+                        </div>
+                        <div class="payment-badge cashback">+ Cashback</div>
+                    </div>
+                </div>
+
+                <div class="alert warning" style="margin-top: 1rem;">
+                    <div class="icon">💡</div>
+                    <div class="content">
+                        <strong>Cashback Especial</strong>
+                        <p>Ganhe 2% de volta em EconoPay ao pagar com PIX ou cartão de débito!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Terms -->
+            <section class="section-card">
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="termsCheckbox" onchange="updateFinalizeButton()">
+                    <label for="termsCheckbox">
+                        Li e concordo com os <a href="#" target="_blank">Termos de Uso</a> e 
+                        <a href="#" target="_blank">Política de Privacidade</a>. 
+                        Confirmo que as informações de entrega e pagamento estão corretas.
+                    </label>
+                </div>
+            </section>
+        </div>
+
+        <!-- Summary Sidebar -->
+        <aside class="summary-sidebar">
+            <div class="summary-card">
+                <h3>📋 Resumo do Pedido</h3>
+
+                <!-- Economy Highlight -->
+                <div class="economy-box">
+                    <div class="amount">R$ 18,50</div>
+                    <div class="description">de economia vs. 1 loja</div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="order-items">
+                    <div class="order-store">
+                        <div class="store-name">🏪 Mercado A (3 itens)</div>
+                        <div class="item-summary">
+                            <span>Subtotal</span>
+                            <span>R$ 42,99</span>
+                        </div>
+                        <div class="item-summary">
+                            <span>Frete</span>
+                            <span style="color: var(--success);">Grátis</span>
+                        </div>
+                    </div>
+
+                    <div class="order-store">
+                        <div class="store-name">🏪 Mercado B (2 itens)</div>
+                        <div class="item-summary">
+                            <span>Subtotal</span>
+                            <span>R$ 40,52</span>
+                        </div>
+                        <div class="item-summary">
+                            <span>Frete</span>
+                            <span>R$ 8,90</span>
+                        </div>
+                    </div>
+
+                    <div class="order-store">
+                        <div class="store-name">🏪 Mercado C (2 itens)</div>
+                        <div class="item-summary">
+                            <span>Subtotal</span>
+                            <span>R$ 37,20</span>
+                        </div>
+                        <div class="item-summary">
+                            <span>Frete</span>
+                            <span>R$ 12,90</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Subtotal (7 itens)</span>
+                        <span>R$ 123,91</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Fretes</span>
+                        <span>R$ 21,80</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Descontos</span>
+                        <span class="price-value savings">-R$ 3,20</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total</span>
+                        <span>R$ 142,51</span>
+                    </div>
+                </div>
+
+                <!-- Finalize Button -->
+                <button class="btn-finalize" id="finalizeBtn" onclick="finalizeOrder()" disabled>
+                    🔒 Finalizar Compra - R$ 142,51
+                </button>
+
+                <!-- Security Badges -->
+                <div class="security-badges">
+                    <div class="security-item">
+                        <span class="icon">✓</span>
+                        <span>Pagamento 100% seguro</span>
+                    </div>
+                    <div class="security-item">
+                        <span class="icon">✓</span>
+                        <span>Dados protegidos com criptografia</span>
+                    </div>
+                    <div class="security-item">
+                        <span class="icon">✓</span>
+                        <span>Entregas rastreadas em tempo real</span>
+                    </div>
+                    <div class="security-item">
+                        <span class="icon">✓</span>
+                        <span>Garantia de devolução em 7 dias</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;">Processando seu pedido...</h3>
+            <p style="color: var(--gray-700);">Aguarde enquanto confirmamos o pagamento e geramos seus pedidos</p>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let selectedPaymentMethod = 'pix';
+        let selectedWindows = {
+            'A': 1,
+            'B': 1,
+            'C': 1
+        };
+
+        // Select Window
+        function selectWindow(element, store, windowId) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.window-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedWindows[store] = windowId;
+            
+            console.log('Selected delivery windows:', selectedWindows);
+        }
+
+        // Select Payment Method
+        function selectPayment(element, method) {
+            document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedPaymentMethod = method;
+
+            // Hide/show forms
+            document.getElementById('savedCards').classList.remove('active');
+            document.getElementById('cardForm').classList.remove('active');
+
+            if (method === 'card') {
+                document.getElementById('savedCards').classList.add('active');
+            }
+
+            console.log('Selected payment method:', method);
+        }
+
+        // Select Saved Card
+        function selectSavedCard(element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.saved-card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // Show New Card Form
+        function showNewCard() {
+            document.getElementById('savedCards').classList.remove('active');
+            document.getElementById('cardForm').classList.add('active');
+        }
+
+        // Edit Address
+        function editAddress() {
+            alert('Funcionalidade de edição de endereço (modal ou página)');
+        }
+
+        // Update Finalize Button
+        function updateFinalizeButton() {
+            const termsChecked = document.getElementById('termsCheckbox').checked;
+            const finalizeBtn = document.getElementById('finalizeBtn');
+            finalizeBtn.disabled = !termsChecked;
+        }
+
+        // Finalize Order
+        function finalizeOrder() {
+            // Validation
+            if (!document.getElementById('termsCheckbox').checked) {
+                alert('Por favor, aceite os termos para continuar.');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loadingOverlay').classList.add('show');
+
+            // Simulate API call to create order
+            console.log('Creating order with:', {
+                payment_method: selectedPaymentMethod,
+                delivery_windows: selectedWindows,
+                address_id: 'addr_99',
+                cart_id: 'cart_7ab1'
+            });
+
+            // Simulate processing time
+            setTimeout(() => {
+                // Simulate payment processing
+                console.log('Processing payment...');
+                
+                setTimeout(() => {
+                    // Success - redirect to confirmation page
+                    window.location.href = 'pedido-confirmado.html?order=ORD123456';
+                }, 2000);
+            }, 2000);
+        }
+
+        // Format card number
+        document.getElementById('cardNumber')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+
+        // Format expiry
+        document.getElementById('cardExpiry')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Telemetry
+        console.log('Telemetry: checkout_viewed', {
+            cart_id: 'cart_7ab1',
+            total: 142.51,
+            items_count: 7,
+            stores_count: 3,
+            timestamp: new Date().toISOString()
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Checkout page loaded');
+            
+            // Auto-validate inventory and prices
+            console.log('Validating inventory and prices...');
+            
+            // Check payment methods eligibility
+            console.log('Checking payment methods eligibility...');
+        });
+    </script>
+</body>
+</html>

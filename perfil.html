@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerencie sua conta EconoFácil">
+    <title>Meu Perfil - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #4CAF50;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --bg-light: #FAFAFA;
+            --white: #FFFFFF;
+            --border-color: #E0E0E0;
+            --error-color: #F44336;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--white);
+            margin: 0 auto 1rem;
+        }
+
+        .user-name {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-email {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .menu-nav {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-link:hover {
+            background: var(--bg-light);
+        }
+
+        .menu-link.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .menu-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #D32F2F;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 1px solid #4CAF50;
+        }
+
+        .alert-error {
+            background: #FFEBEE;
+            color: #C62828;
+            border: 1px solid #F44336;
+        }
+
+        .alert-warning {
+            background: #FFF3E0;
+            color: #E65100;
+            border: 1px solid #FF9800;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0.25rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Danger Zone */
+        .danger-zone {
+            background: #FFEBEE;
+            border: 2px solid var(--error-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .danger-zone-title {
+            color: var(--error-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <span>🛒</span> Econo<span>Fácil</span>
+            </a>
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                ← Voltar para o início
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" role="navigation">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-name" id="userName">Usuário</div>
+            <div class="user-email" id="userEmail">usuario@email.com</div>
+
+            <nav>
+                <ul class="menu-nav">
+                    <li class="menu-item">
+                        <a class="menu-link active" data-section="personal-info">
+                            <span class="menu-icon">👤</span>
+                            <span>Dados Pessoais</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" data-section="addresses">
+                            <span class="menu-icon">📍</span>
+                            <span>Endereços</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" data-section="preferences">
+                            <span class="menu-icon">🥗</span>
+                            <span>Preferências</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" data-section="payments">
+                            <span class="menu-icon">💳</span>
+                            <span>Pagamentos</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" data-section="security">
+                            <span class="menu-icon">🔒</span>
+                            <span>Segurança</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" data-section="notifications">
+                            <span class="menu-icon">🔔</span>
+                            <span>Notificações</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" data-section="privacy">
+                            <span class="menu-icon">🛡️</span>
+                            <span>Privacidade</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" role="main">
+            <div id="alertContainer"></div>
+
+            <!-- Personal Info Section -->
+            <section class="section active" id="personal-info">
+                <div class="section-header">
+                    <h1 class="section-title">Dados Pessoais</h1>
+                    <p class="section-subtitle">Gerencie suas informações básicas</p>
+                </div>
+
+                <form id="personalInfoForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Nome completo *</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefone</label>
+                            <input type="tel" id="phone" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" required disabled>
+                            <small style="color: var(--text-light)">O e-mail não pode ser alterado</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF</label>
+                            <input type="text" id="cpf" placeholder="000.000.000-00">
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Salvar Alterações
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm('personalInfoForm')">
+                            ↺ Cancelar
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Addresses Section -->
+            <section class="section" id="addresses">
+                <div class="section-header">
+                    <h1 class="section-title">Meus Endereços</h1>
+                    <p class="section-subtitle">Gerencie seus endereços de entrega</p>
+                </div>
+
+                <button class="btn btn-primary" onclick="showAddAddressModal()">
+                    ➕ Adicionar Endereço
+                </button>
+
+                <div id="addressesList" style="margin-top: 1.5rem;">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Carregando endereços...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preferences Section -->
+            <section class="section" id="preferences">
+                <div class="section-header">
+                    <h1 class="section-title">Preferências Alimentares</h1>
+                    <p class="section-subtitle">Configure suas restrições e dietas</p>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">ℹ️ Como funciona</div>
+                    <div>Suas preferências serão usadas para filtrar produtos automaticamente e personalizar recomendações.</div>
+                </div>
+
+                <form id="preferencesForm">
+                    <h3 style="margin-bottom: 1rem;">Restrições Alimentares</h3>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="pref-lactose" value="lactose-free">
+                        <label for="pref-lactose">Sem lactose</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="pref-gluten" value="gluten-free">
+                        <label for="pref-gluten">Sem glúten</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="pref-vegetarian" value="vegetarian">
+                        <label for="pref-vegetarian">Vegetariano</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="pref-vegan" value="vegan">
+                        <label for="pref-vegan">Vegano</label>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem;">Alergênicos a Evitar</h3>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="allergen-peanut" value="amendoim">
+                        <label for="allergen-peanut">Amendoim</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="allergen-nuts" value="castanhas">
+                        <label for="allergen-nuts">Castanhas</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="allergen-soy" value="soja">
+                        <label for="allergen-soy">Soja</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="allergen-egg" value="ovo">
+                        <label for="allergen-egg">Ovo</label>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Salvar Preferências
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Payments Section -->
+            <section class="section" id="payments">
+                <div class="section-header">
+                    <h1 class="section-title">Métodos de Pagamento</h1>
+                    <p class="section-subtitle">Gerencie seus cartões salvos</p>
+                </div>
+
+                <button class="btn btn-primary" onclick="showAddCardModal()">
+                    ➕ Adicionar Cartão
+                </button>
+
+                <div id="paymentsList" style="margin-top: 1.5rem;">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💳</div>
+                        <p>Nenhum cartão cadastrado</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security Section -->
+            <section class="section" id="security">
+                <div class="section-header">
+                    <h1 class="section-title">Segurança</h1>
+                    <p class="section-subtitle">Proteja sua conta</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Alterar Senha</div>
+                            <small style="color: var(--text-light)">Última alteração: há 30 dias</small>
+                        </div>
+                        <button class="btn btn-secondary" onclick="window.location.href='recuperar-senha.html'">
+                            Alterar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Autenticação em Dois Fatores (2FA)</div>
+                            <small style="color: var(--text-light)">Status: <span id="2faStatus">Desativado</span></small>
+                        </div>
+                        <button class="btn btn-success" id="toggle2FA">
+                            Ativar 2FA
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Sessões Ativas</div>
+                            <small style="color: var(--text-light)">Dispositivos conectados à sua conta</small>
+                        </div>
+                        <button class="btn btn-secondary" onclick="loadSessions()">
+                            Ver Todas
+                        </button>
+                    </div>
+                    <div id="sessionsList"></div>
+                </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section class="section" id="notifications">
+                <div class="section-header">
+                    <h1 class="section-title">Notificações</h1>
+                    <p class="section-subtitle">Configure como deseja ser notificado</p>
+                </div>
+
+                <form id="notificationsForm">
+                    <h3 style="margin-bottom: 1rem;">Canais de Notificação</h3>
+
+                    <div class="card">
+                        <div class="card-title" style="margin-bottom: 1rem;">Atualizações de Pedidos</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notif-order-email" checked>
+                            <label for="notif-order-email">📧 E-mail</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notif-order-push" checked>
+                            <label for="notif-order-push">📱 Push</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notif-order-sms">
+                            <label for="notif-order-sms">💬 SMS</label>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title" style="margin-bottom: 1rem;">Promoções e Ofertas</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notif-promo-email">
+                            <label for="notif-promo-email">📧 E-mail</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notif-promo-push">
+                            <label for="notif-promo-push">📱 Push</label>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem;">Horário de Silêncio</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="quietHours">
+                        <label for="quietHours">Ativar modo silencioso (22h às 7h)</label>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Salvar Configurações
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Privacy Section -->
+            <section class="section" id="privacy">
+                <div class="section-header">
+                    <h1 class="section-title">Privacidade e Dados</h1>
+                    <p class="section-subtitle">Gerencie seus dados pessoais (LGPD)</p>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">🛡️ Seus Direitos</div>
+                    <div>De acordo com a LGPD, você pode exportar, retificar ou excluir seus dados pessoais a qualquer momento.</div>
+                </div>
+
+                <form id="privacyForm">
+                    <h3 style="margin-bottom: 1rem;">Consentimentos</h3>
+
+                    <div class="card">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="consent-personalization" checked>
+                            <label for="consent-personalization">
+                                <strong>Personalização</strong><br>
+                                <small style="color: var(--text-light)">Permitir recomendações personalizadas baseadas no meu histórico</small>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="consent-marketing">
+                            <label for="consent-marketing">
+                                <strong>Marketing</strong><br>
+                                <small style="color: var(--text-light)">Receber e-mails e notificações sobre ofertas e promoções</small>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Atualizar Consentimentos
+                        </button>
+                    </div>
+                </form>
+
+                <h3 style="margin: 2rem 0 1rem;">Gerenciar Seus Dados</h3>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Exportar Dados</div>
+                            <small style="color: var(--text-light)">Baixe uma cópia de todos os seus dados</small>
+                        </div>
+                        <button class="btn btn-secondary" onclick="exportData()">
+                            📥 Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="danger-zone">
+                    <div class="danger-zone-title">⚠️ Zona de Perigo</div>
+                    <p style="margin-bottom: 1rem;">As ações abaixo são irreversíveis. Prossiga com cuidado.</p>
+                    
+                    <button class="btn btn-danger" onclick="deleteAccount()">
+                        🗑️ Excluir Minha Conta
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Mock user data
+        let userData = {
+            name: 'João Silva',
+            email: 'joao.silva@email.com',
+            phone: '(11) 98765-4321',
+            cpf: '123.456.789-00'
+        };
+
+        // Inicializar
+        function init() {
+            loadUserData();
+            setupMenuNavigation();
+            setupForms();
+            loadAddresses();
+        }
+
+        // Carregar dados do usuário
+        function loadUserData() {
+            // Carregar do localStorage
+            const user = localStorage.getItem('user');
+            if (user) {
+                userData = JSON.parse(user);
+            }
+
+            // Atualizar UI
+            document.getElementById('userName').textContent = userData.name || 'Usuário';
+            document.getElementById('userEmail').textContent = userData.email || 'usuario@email.com';
+            document.getElementById('userAvatar').textContent = (userData.name || 'U').charAt(0).toUpperCase();
+
+            // Preencher formulário
+            document.getElementById('fullName').value = userData.name || '';
+            document.getElementById('email').value = userData.email || '';
+            document.getElementById('phone').value = userData.phone || '';
+            document.getElementById('cpf').value = userData.cpf || '';
+        }
+
+        // Setup menu navigation
+        function setupMenuNavigation() {
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = link.getAttribute('data-section');
+                    
+                    // Update active menu
+                    document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+
+                    // Show section
+                    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                    document.getElementById(sectionId).classList.add('active');
+
+                    // Track
+                    trackEvent('profile_section_viewed', { section: sectionId });
+                });
+            });
+        }
+
+        // Setup forms
+        function setupForms() {
+            // Personal Info Form
+            document.getElementById('personalInfoForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                userData.name = document.getElementById('fullName').value;
+                userData.phone = document.getElementById('phone').value;
+                userData.cpf = document.getElementById('cpf').value;
+
+                // Simular API call
+                await simulateApiCall();
+                
+                localStorage.setItem('user', JSON.stringify(userData));
+                showAlert('Dados atualizados com sucesso!', 'success');
+                trackEvent('profile_updated', { section: 'personal_info' });
+            });
+
+            // Preferences Form
+            document.getElementById('preferencesForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const preferences = {
+                    diets: [],
+                    allergens: []
+                };
+
+                document.querySelectorAll('#preferencesForm input[type="checkbox"]:checked').forEach(cb => {
+                    if (cb.id.startsWith('pref-')) {
+                        preferences.diets.push(cb.value);
+                    } else if (cb.id.startsWith('allergen-')) {
+                        preferences.allergens.push(cb.value);
+                    }
+                });
+
+                await simulateApiCall();
+                showAlert('Preferências salvas com sucesso!', 'success');
+                trackEvent('preferences_updated', preferences);
+            });
+
+            // Notifications Form
+            document.getElementById('notificationsForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await simulateApiCall();
+                showAlert('Configurações de notificação atualizadas!', 'success');
+                trackEvent('notifications_updated');
+            });
+
+            // Privacy Form
+            document.getElementById('privacyForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const personalization = document.getElementById('consent-personalization').checked;
+                const marketing = document.getElementById('consent-marketing').checked;
+
+                await simulateApiCall();
+                showAlert('Consentimentos atualizados com sucesso!', 'success');
+                trackEvent('consents_updated', { personalization, marketing });
+            });
+
+            // 2FA Toggle
+            document.getElementById('toggle2FA').addEventListener('click', async () => {
+                const status = document.getElementById('2faStatus');
+                const btn = document.getElementById('toggle2FA');
+                
+                if (status.textContent === 'Desativado') {
+                    await simulateApiCall();
+                    status.textContent = 'Ativado';
+                    btn.textContent = 'Desativar 2FA';
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-secondary');
+                    showAlert('2FA ativado com sucesso! Use seu app autenticador.', 'success');
+                    trackEvent('2fa_enabled');
+                } else {
+                    if (confirm('Tem certeza que deseja desativar a autenticação em dois fatores?')) {
+                        await simulateApiCall();
+                        status.textContent = 'Desativado';
+                        btn.textContent = 'Ativar 2FA';
+                        btn.classList.remove('btn-secondary');
+                        btn.classList.add('btn-success');
+                        showAlert('2FA desativado.', 'success');
+                        trackEvent('2fa_disabled');
+                    }
+                }
+            });
+        }
+
+        // Load addresses
+        function loadAddresses() {
+            const container = document.getElementById('addressesList');
+            
+            // Mock addresses
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">🏠 Casa</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem;">
+                                    Rua das Flores, 123 - Apto 45<br>
+                                    Centro, São Paulo - SP<br>
+                                    CEP: 01234-567
+                                </div>
+                                <div style="margin-top: 0.5rem;">
+                                    <span style="background: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+                                        Padrão
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="icon-btn" title="Editar" onclick="editAddress(1)">✏️</button>
+                                <button class="icon-btn" title="Excluir" onclick="deleteAddress(1)">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }, 500);
+        }
+
+        // Show alerts
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alertContainer');
+            container.innerHTML = `
+                <div class="alert alert-${type} show">
+                    ${type === 'success' ? '✅' : '❌'} ${message}
+                </div>
+            `;
+
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Simulate API call
+        async function simulateApiCall() {
+            return new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        // Export data
+        async function exportData() {
+            if (confirm('Deseja exportar todos os seus dados? Você receberá um e-mail com o arquivo em até 15 dias.')) {
+                await simulateApiCall();
+                showAlert('Solicitação de exportação enviada! Você receberá um e-mail quando estiver pronto.', 'success');
+                trackEvent('data_export_requested');
+            }
+        }
+
+        // Delete account
+        async function deleteAccount() {
+            const confirmation = prompt('Esta ação é IRREVERSÍVEL! Digite "EXCLUIR" para confirmar:');
+            
+            if (confirmation === 'EXCLUIR') {
+                await simulateApiCall();
+                showAlert('Sua conta foi marcada para exclusão. Todos os dados serão removidos em até 15 dias.', 'warning');
+                trackEvent('account_deletion_requested');
+                
+                setTimeout(() => {
+                    localStorage.clear();
+                    window.location.href = 'index.html';
+                }, 3000);
+            } else if (confirmation !== null) {
+                showAlert('Texto incorreto. A exclusão foi cancelada.', 'error');
+            }
+        }
+
+        // Load sessions
+        function loadSessions() {
+            const container = document.getElementById('sessionsList');
+            container.innerHTML = `
+                <div style="margin-top: 1rem;">
+                    <div style="padding: 0.75rem; background: var(--bg-light); border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>💻 Chrome - Windows</strong><br>
+                                <small style="color: var(--text-light)">Última atividade: Agora • São Paulo, SP</small>
+                            </div>
+                            <span style="background: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+                                Atual
+                            </span>
+                        </div>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--bg-light); border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>📱 Mobile App - Android</strong><br>
+                                <small style="color: var(--text-light)">Última atividade: há 2 horas • São Paulo, SP</small>
+                            </div>
+                            <button class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="revokeSession(2)">
+                                Desconectar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Revoke session
+        async function revokeSession(sessionId) {
+            if (confirm('Deseja desconectar este dispositivo?')) {
+                await simulateApiCall();
+                showAlert('Dispositivo desconectado com sucesso!', 'success');
+                loadSessions();
+                trackEvent('session_revoked', { session_id: sessionId });
+            }
+        }
+
+        // Modal functions (simplified)
+        function showAddAddressModal() {
+            alert('Modal de adicionar endereço seria aberto aqui');
+        }
+
+        function showAddCardModal() {
+            alert('Modal de adicionar cartão seria aberto aqui');
+        }
+
+        function editAddress(id) {
+            alert('Modal de editar endereço ' + id);
+        }
+
+        function deleteAddress(id) {
+            if (confirm('Deseja excluir este endereço?')) {
+                showAlert('Endereço excluído com sucesso!', 'success');
+                trackEvent('address_deleted', { address_id: id });
+            }
+        }
+
+        function resetForm(formId) {
+            document.getElementById(formId).reset();
+            loadUserData();
+        }
+
+        // Telemetria
+        function trackEvent(eventName, data = {}) {
+            console.log('Event:', eventName, {
+                ...data,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Initialize
+        init();
+        trackEvent('profile_page_viewed');
+    </script>
+</body>
+</html>

@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Listas - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #2563eb, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .stat-icon.primary {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        }
+
+        .stat-icon.success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        }
+
+        .stat-icon.warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #334155;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 180px;
+        }
+
+        .filter-select:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat 15px center;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        /* Lists Grid */
+        .lists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .list-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .list-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .list-card-header {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .list-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .list-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-manual {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-recipe {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-imported {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .list-meta {
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .list-card-body {
+            padding: 20px;
+        }
+
+        .list-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .list-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .list-notes {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 14px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #dbeafe;
+        }
+
+        .btn-optimize {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .btn-optimize:hover {
+            background: #a7f3d0;
+        }
+
+        .btn-cart {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-cart:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-delete:hover {
+            background: #fecaca;
+        }
+
+        /* Empty State */
+        .empty-state {
+            background: white;
+            padding: 60px 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .items-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .item-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .item-row input {
+            flex: 2;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .item-row input[type="number"] {
+            flex: 1;
+            max-width: 80px;
+        }
+
+        .btn-remove-item {
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-select,
+            .search-box {
+                width: 100%;
+            }
+
+            .lists-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="logo">📝 Minhas Listas</div>
+                <div class="header-subtitle">Organize suas compras e economize!</div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="window.location.href='receitas.html'">
+                    🍳 Criar da Receita
+                </button>
+                <button class="btn btn-primary" onclick="openCreateModal()">
+                    ➕ Nova Lista
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon primary">📋</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="totalLists">0</div>
+                    <div class="stat-label">Total de Listas</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon success">✅</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="totalItems">0</div>
+                    <div class="stat-label">Total de Itens</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">💰</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="estimatedTotal">R$ 0,00</div>
+                    <div class="stat-label">Estimativa Total</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label class="filter-label">Tipo</label>
+                <select class="filter-select" id="typeFilter" onchange="applyFilters()">
+                    <option value="">Todas</option>
+                    <option value="manual">Manual</option>
+                    <option value="recipe">Da Receita</option>
+                    <option value="import">Importada</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Ordenar por</label>
+                <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+                    <option value="updated">Recentes</option>
+                    <option value="name">Nome (A-Z)</option>
+                    <option value="items">Mais itens</option>
+                    <option value="created">Mais antigas</option>
+                </select>
+            </div>
+
+            <div class="filter-group search-box">
+                <label class="filter-label">Buscar</label>
+                <input type="text" class="search-input" id="searchInput" 
+                       placeholder="Buscar por nome ou notas..." 
+                       oninput="applyFilters()">
+            </div>
+        </div>
+
+        <!-- Lists Grid -->
+        <div class="lists-grid" id="listsGrid">
+            <!-- Dynamic content -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">📋</div>
+            <div class="empty-title">Nenhuma lista encontrada</div>
+            <div class="empty-text">Crie sua primeira lista e organize suas compras!</div>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+                ➕ Criar Primeira Lista
+            </button>
+        </div>
+    </div>
+
+    <!-- Create/Edit List Modal -->
+    <div class="modal" id="listModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Nova Lista</div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="listForm" onsubmit="saveList(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nome da Lista *</label>
+                        <input type="text" class="form-input" id="listName" 
+                               placeholder="Ex: Compra do Mês" required maxlength="60">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notas (opcional)</label>
+                        <textarea class="form-textarea" id="listNotes" 
+                                  placeholder="Adicione notas sobre esta lista..." maxlength="280"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Itens</label>
+                        <div class="items-list" id="itemsList">
+                            <!-- Dynamic items -->
+                        </div>
+                        <button type="button" class="btn btn-secondary" 
+                                style="width: 100%; margin-top: 10px;" 
+                                onclick="addItemRow()">
+                            ➕ Adicionar Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('listForm').requestSubmit()">
+                    💾 Salvar Lista
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Mock data - In production, fetch from API
+        let listsData = [
+            {
+                list_id: 'LIST-001',
+                name: 'Compra do Mês',
+                source: 'manual',
+                items_count: 23,
+                total_estimate: 487.90,
+                notes: 'Lista completa para o mês de novembro',
+                created_at: '2025-11-01T10:00:00Z',
+                updated_at: '2025-11-07T15:30:00Z',
+                items: [
+                    { sku_id: 'SKU001', name: 'Arroz 5kg', qty: 2, price: 22.90 },
+                    { sku_id: 'SKU002', name: 'Feijão 1kg', qty: 3, price: 8.90 }
+                    // ... more items
+                ]
+            },
+            {
+                list_id: 'LIST-002',
+                name: 'Feijoada Completa (10 pessoas)',
+                source: 'recipe',
+                items_count: 15,
+                total_estimate: 234.50,
+                notes: 'Gerada automaticamente da receita de Feijoada',
+                created_at: '2025-11-05T14:20:00Z',
+                updated_at: '2025-11-06T09:15:00Z',
+                items: []
+            },
+            {
+                list_id: 'LIST-003',
+                name: 'Churrasco Sábado',
+                source: 'manual',
+                items_count: 12,
+                total_estimate: 356.80,
+                notes: 'Para 15 pessoas',
+                created_at: '2025-10-28T11:45:00Z',
+                updated_at: '2025-11-03T16:20:00Z',
+                items: []
+            }
+        ];
+
+        let filteredLists = [...listsData];
+        let currentEditingList = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLists();
+            updateStats();
+        });
+
+        // Render lists
+        function renderLists() {
+            const container = document.getElementById('listsGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filteredLists.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'grid';
+            emptyState.style.display = 'none';
+            container.innerHTML = '';
+
+            filteredLists.forEach(list => {
+                const card = createListCard(list);
+                container.appendChild(card);
+            });
+        }
+
+        // Create list card
+        function createListCard(list) {
+            const card = document.createElement('div');
+            card.className = 'list-card';
+            card.onclick = () => viewList(list.list_id);
+
+            const sourceBadge = getSourceBadge(list.source);
+            const sourceText = getSourceText(list.source);
+
+            card.innerHTML = `
+                <div class="list-card-header">
+                    <div class="list-name">
+                        ${list.name}
+                        <span class="list-badge ${sourceBadge}">${sourceText}</span>
+                    </div>
+                    <div class="list-meta">
+                        <span>📅 ${formatDate(list.updated_at)}</span>
+                    </div>
+                </div>
+                <div class="list-card-body">
+                    <div class="list-stats">
+                        <div class="list-stat">
+                            <span>📦</span>
+                            <strong>${list.items_count}</strong> ${list.items_count === 1 ? 'item' : 'itens'}
+                        </div>
+                        <div class="list-stat">
+                            <span>💰</span>
+                            <strong>${formatCurrency(list.total_estimate)}</strong>
+                        </div>
+                    </div>
+                    ${list.notes ? `<div class="list-notes">${list.notes}</div>` : ''}
+                    <div class="list-actions" onclick="event.stopPropagation()">
+                        <button class="btn-small btn-edit" onclick="editList('${list.list_id}')">
+                            ✏️ Editar
+                        </button>
+                        <button class="btn-small btn-optimize" onclick="optimizeList('${list.list_id}')">
+                            ⚡ Otimizar
+                        </button>
+                        <button class="btn-small btn-cart" onclick="addToCart('${list.list_id}')">
+                            🛒 Carrinho
+                        </button>
+                        <button class="btn-small btn-delete" onclick="deleteList('${list.list_id}')">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Get source badge class
+        function getSourceBadge(source) {
+            const badges = {
+                'manual': 'badge-manual',
+                'recipe': 'badge-recipe',
+                'import': 'badge-imported'
+            };
+            return badges[source] || 'badge-manual';
+        }
+
+        // Get source text
+        function getSourceText(source) {
+            const texts = {
+                'manual': 'Manual',
+                'recipe': 'Receita',
+                'import': 'Importada'
+            };
+            return texts[source] || 'Manual';
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const typeFilter = document.getElementById('typeFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+
+            filteredLists = listsData.filter(list => {
+                // Type filter
+                if (typeFilter && list.source !== typeFilter) return false;
+
+                // Search filter
+                if (searchQuery) {
+                    const matchesName = list.name.toLowerCase().includes(searchQuery);
+                    const matchesNotes = list.notes && list.notes.toLowerCase().includes(searchQuery);
+                    if (!matchesName && !matchesNotes) return false;
+                }
+
+                return true;
+            });
+
+            // Sort
+            filteredLists.sort((a, b) => {
+                switch(sortFilter) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'items':
+                        return b.items_count - a.items_count;
+                    case 'created':
+                        return new Date(a.created_at) - new Date(b.created_at);
+                    case 'updated':
+                    default:
+                        return new Date(b.updated_at) - new Date(a.updated_at);
+                }
+            });
+
+            renderLists();
+            updateStats();
+        }
+
+        // Update stats
+        function updateStats() {
+            const totalLists = filteredLists.length;
+            const totalItems = filteredLists.reduce((sum, list) => sum + list.items_count, 0);
+            const estimatedTotal = filteredLists.reduce((sum, list) => sum + list.total_estimate, 0);
+
+            document.getElementById('totalLists').textContent = totalLists;
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('estimatedTotal').textContent = formatCurrency(estimatedTotal);
+        }
+
+        // Open create modal
+        function openCreateModal() {
+            currentEditingList = null;
+            document.getElementById('modalTitle').textContent = 'Nova Lista';
+            document.getElementById('listName').value = '';
+            document.getElementById('listNotes').value = '';
+            document.getElementById('itemsList').innerHTML = '';
+            
+            // Add 3 empty rows
+            for (let i = 0; i < 3; i++) {
+                addItemRow();
+            }
+
+            document.getElementById('listModal').classList.add('show');
+        }
+
+        // Edit list
+        function editList(listId) {
+            const list = listsData.find(l => l.list_id === listId);
+            if (!list) return;
+
+            currentEditingList = list;
+            document.getElementById('modalTitle').textContent = 'Editar Lista';
+            document.getElementById('listName').value = list.name;
+            document.getElementById('listNotes').value = list.notes || '';
+            
+            const itemsContainer = document.getElementById('itemsList');
+            itemsContainer.innerHTML = '';
+            
+            // Add existing items
+            list.items.forEach(item => {
+                addItemRow(item.name, item.qty);
+            });
+
+            // Add 2 empty rows
+            addItemRow();
+            addItemRow();
+
+            document.getElementById('listModal').classList.add('show');
+        }
+
+        // Add item row
+        function addItemRow(name = '', qty = 1) {
+            const itemsContainer = document.getElementById('itemsList');
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Nome do produto" value="${name}">
+                <input type="number" min="1" max="999" value="${qty}">
+                <button type="button" class="btn-remove-item" onclick="this.parentElement.remove()">❌</button>
+            `;
+            itemsContainer.appendChild(row);
+        }
+
+        // Save list
+        function saveList(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('listName').value.trim();
+            const notes = document.getElementById('listNotes').value.trim();
+            
+            // Get items
+            const itemRows = document.querySelectorAll('#itemsList .item-row');
+            const items = [];
+            itemRows.forEach(row => {
+                const itemName = row.querySelector('input[type="text"]').value.trim();
+                const qty = parseInt(row.querySelector('input[type="number"]').value);
+                if (itemName) {
+                    items.push({ name: itemName, qty: qty });
+                }
+            });
+
+            if (items.length === 0) {
+                showToast('Adicione pelo menos um item à lista', 'error');
+                return;
+            }
+
+            if (currentEditingList) {
+                // Update existing list
+                currentEditingList.name = name;
+                currentEditingList.notes = notes;
+                currentEditingList.items_count = items.length;
+                currentEditingList.updated_at = new Date().toISOString();
+                showToast('Lista atualizada com sucesso!', 'success');
+            } else {
+                // Create new list
+                const newList = {
+                    list_id: 'LIST-' + Date.now(),
+                    name: name,
+                    source: 'manual',
+                    items_count: items.length,
+                    total_estimate: items.length * 15.50, // Mock estimate
+                    notes: notes,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    items: items
+                };
+                listsData.unshift(newList);
+                showToast('Lista criada com sucesso!', 'success');
+            }
+
+            closeModal();
+            applyFilters();
+
+            // Telemetry
+            console.log('Telemetry: list_saved', {
+                list_id: currentEditingList?.list_id || 'new',
+                items_count: items.length,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('listModal').classList.remove('show');
+            currentEditingList = null;
+        }
+
+        // View list
+        function viewList(listId) {
+            console.log('Viewing list:', listId);
+            editList(listId);
+        }
+
+        // Optimize list
+        function optimizeList(listId) {
+            console.log('Optimizing list:', listId);
+            showToast('Otimizando compra entre múltiplas lojas...', 'success');
+            setTimeout(() => {
+                window.location.href = `carrinho.html?from_list=${listId}`;
+            }, 1500);
+        }
+
+        // Add to cart
+        function addToCart(listId) {
+            console.log('Adding list to cart:', listId);
+            showToast('Adicionando itens ao carrinho...', 'success');
+            setTimeout(() => {
+                window.location.href = `carrinho.html?from_list=${listId}`;
+            }, 1500);
+        }
+
+        // Delete list
+        function deleteList(listId) {
+            const list = listsData.find(l => l.list_id === listId);
+            if (!list) return;
+
+            if (confirm(`Tem certeza que deseja excluir a lista "${list.name}"?`)) {
+                listsData = listsData.filter(l => l.list_id !== listId);
+                showToast('Lista excluída com sucesso', 'success');
+                applyFilters();
+
+                // Telemetry
+                console.log('Telemetry: list_deleted', {
+                    list_id: listId,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) return 'Hoje';
+            if (diffDays === 1) return 'Ontem';
+            if (diffDays < 7) return `${diffDays} dias atrás`;
+
+            return new Intl.DateTimeFormat('pt-BR', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            }).format(date);
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        // Show toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Telemetry
+        console.log('Telemetry: lists_page_viewed', {
+            user_id: 'usr_001',
+            total_lists: listsData.length,
+            timestamp: new Date().toISOString()
+        });
+
+        // Close modal on ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal on outside click
+        document.getElementById('listModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arroz Integral 5kg - EconoFácil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #003366;
+            --primary-green: #006633;
+            --light-blue: #E6F2FF;
+            --light-green: #E6F5E6;
+            --white: #FFFFFF;
+            --gray-100: #F5F5F5;
+            --gray-200: #E0E0E0;
+            --gray-300: #BDBDBD;
+            --gray-700: #424242;
+            --gray-900: #212121;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
+            min-height: 100vh;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Cart Icon */
+        .cart-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.4rem;
+        }
+
+        .cart-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--success);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .breadcrumb a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        /* Image Gallery */
+        .image-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .main-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid var(--gray-200);
+            padding: 1rem;
+            background: var(--gray-100);
+        }
+
+        .thumbnail-list {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 2px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0.5rem;
+            background: white;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Product Info */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .product-title {
+            flex: 1;
+        }
+
+        .product-title h1 {
+            font-size: 1.75rem;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-brand {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .favorite-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 2rem;
+            color: var(--gray-300);
+            transition: all 0.3s;
+        }
+
+        .favorite-btn:hover {
+            color: var(--error);
+            transform: scale(1.1);
+        }
+
+        .favorite-btn.active {
+            color: var(--error);
+        }
+
+        /* Badges */
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .badge.lactose-free {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .badge.gluten-free {
+            background: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        .badge.vegan {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        /* Product Meta */
+        .product-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: 12px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-value {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        /* Price Section */
+        .price-section {
+            background: linear-gradient(135deg, var(--light-blue), var(--light-green));
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .price-header h3 {
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+
+        .best-price-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .store-prices {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .store-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .store-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .store-card.selected {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .store-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .store-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: var(--gray-100);
+            padding: 0.5rem;
+        }
+
+        .store-details h4 {
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .store-distance {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .store-stock {
+            font-size: 0.85rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .store-stock.low {
+            color: var(--warning);
+        }
+
+        .store-pricing {
+            text-align: right;
+        }
+
+        .current-price {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        .unit-price {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            margin-top: 0.25rem;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+
+        .savings {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .qty-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .qty-btn:hover {
+            background: var(--primary-green);
+        }
+
+        .qty-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .qty-input {
+            width: 60px;
+            text-align: center;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        .share-btn {
+            background: var(--gray-200);
+            color: var(--gray-700);
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background: var(--gray-300);
+        }
+
+        /* Tabs Section */
+        .tabs-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: var(--primary-blue);
+        }
+
+        .tab.active {
+            color: var(--primary-blue);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Nutrition Table */
+        .nutrition-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .nutrition-table th,
+        .nutrition-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .nutrition-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .nutrition-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .nutrition-table .value {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        /* Ingredients */
+        .ingredients-list {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: 12px;
+            line-height: 1.8;
+        }
+
+        /* Equivalents Section */
+        .equivalents-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .equivalents-section h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .equivalents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .equivalent-card {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .equivalent-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-blue);
+        }
+
+        .equivalent-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .equivalent-info h4 {
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .equivalent-brand {
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-comparison {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .equivalent-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        .price-diff {
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .price-diff.cheaper {
+            background: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        .price-diff.more-expensive {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .rating-summary {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .rating-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .rating-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stars {
+            color: #FFC107;
+            font-size: 1.5rem;
+        }
+
+        .review-count {
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        .review-card {
+            border-top: 1px solid var(--gray-200);
+            padding: 1.5rem 0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .reviewer-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .review-date {
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        .review-text {
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-hover);
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .equivalents-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .product-grid,
+            .tabs-container,
+            .equivalents-section,
+            .reviews-section {
+                padding: 1rem;
+            }
+
+            .product-title h1 {
+                font-size: 1.3rem;
+            }
+
+            .current-price {
+                font-size: 1.5rem;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span>🛒</span>
+                <span>EconoFácil</span>
+            </a>
+            <nav class="nav-links">
+                <a href="categoria.html">🔍 Buscar</a>
+                <a href="receitas.html">📖 Receitas</a>
+                <a href="perfil.html">👤 Perfil</a>
+                <a href="carrinho.html" class="cart-icon" title="Carrinho de Compras" aria-label="Carrinho de Compras">
+                    🛒
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span>›</span>
+        <a href="categoria.html?category=mercearia">Mercearia</a>
+        <span>›</span>
+        <a href="categoria.html?category=mercearia&subcategory=arroz">Arroz</a>
+        <span>›</span>
+        <span>Arroz Integral 5kg</span>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Product Grid -->
+        <section class="product-grid">
+            <!-- Image Gallery -->
+            <div class="image-gallery">
+                <img src="https://via.placeholder.com/600x600/E6F2FF/003366?text=Arroz+Integral+5kg" 
+                     alt="Arroz Integral 5kg" 
+                     class="main-image" 
+                     id="mainImage">
+                <div class="thumbnail-list">
+                    <img src="https://via.placeholder.com/80x80/E6F2FF/003366?text=1" 
+                         alt="Vista 1" 
+                         class="thumbnail active" 
+                         onclick="changeImage(this)">
+                    <img src="https://via.placeholder.com/80x80/E6F5E6/006633?text=2" 
+                         alt="Vista 2" 
+                         class="thumbnail" 
+                         onclick="changeImage(this)">
+                    <img src="https://via.placeholder.com/80x80/F5F5F5/424242?text=3" 
+                         alt="Vista 3" 
+                         class="thumbnail" 
+                         onclick="changeImage(this)">
+                    <img src="https://via.placeholder.com/80x80/E6F2FF/003366?text=4" 
+                         alt="Rótulo" 
+                         class="thumbnail" 
+                         onclick="changeImage(this)">
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <div class="product-header">
+                    <div class="product-title">
+                        <div class="product-brand">Marca Premium</div>
+                        <h1>Arroz Integral Tipo 1</h1>
+                    </div>
+                    <button class="favorite-btn" onclick="toggleFavorite()" id="favoriteBtn" 
+                            aria-label="Adicionar aos favoritos">
+                        ♡
+                    </button>
+                </div>
+
+                <!-- Badges -->
+                <div class="badges">
+                    <span class="badge gluten-free">✓ Sem Glúten</span>
+                    <span class="badge vegan">🌱 Vegano</span>
+                </div>
+
+                <!-- Product Meta -->
+                <div class="product-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Peso Líquido</span>
+                        <span class="meta-value">5 kg</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">EAN/GTIN</span>
+                        <span class="meta-value">7891234567890</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Categoria</span>
+                        <span class="meta-value">Mercearia Seca</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Fabricante</span>
+                        <span class="meta-value">Alimentos S/A</span>
+                    </div>
+                </div>
+
+                <!-- Price Section -->
+                <div class="price-section">
+                    <div class="price-header">
+                        <h3>💰 Melhores Preços Próximos a Você</h3>
+                        <span class="best-price-badge">Melhor Oferta</span>
+                    </div>
+                    
+                    <div class="store-prices">
+                        <!-- Store 1 - Best Price -->
+                        <div class="store-card selected" onclick="selectStore(this, 1)">
+                            <div class="store-info">
+                                <img src="https://via.placeholder.com/60x60/4CAF50/FFFFFF?text=A" 
+                                     alt="Mercado A" 
+                                     class="store-logo">
+                                <div class="store-details">
+                                    <h4>Mercado Econômico A</h4>
+                                    <div class="store-distance">📍 1.2 km • Entrega hoje</div>
+                                    <div class="store-stock">✓ Em estoque (47 unidades)</div>
+                                </div>
+                            </div>
+                            <div class="store-pricing">
+                                <div class="current-price">R$ 22,90</div>
+                                <div class="unit-price">R$ 4,58/kg</div>
+                                <div class="old-price">R$ 26,90</div>
+                                <div class="savings">Economize R$ 4,00</div>
+                            </div>
+                        </div>
+
+                        <!-- Store 2 -->
+                        <div class="store-card" onclick="selectStore(this, 2)">
+                            <div class="store-info">
+                                <img src="https://via.placeholder.com/60x60/2196F3/FFFFFF?text=B" 
+                                     alt="Mercado B" 
+                                     class="store-logo">
+                                <div class="store-details">
+                                    <h4>Supermercado Central B</h4>
+                                    <div class="store-distance">📍 2.5 km • Entrega amanhã</div>
+                                    <div class="store-stock">✓ Em estoque (23 unidades)</div>
+                                </div>
+                            </div>
+                            <div class="store-pricing">
+                                <div class="current-price">R$ 24,50</div>
+                                <div class="unit-price">R$ 4,90/kg</div>
+                            </div>
+                        </div>
+
+                        <!-- Store 3 -->
+                        <div class="store-card" onclick="selectStore(this, 3)">
+                            <div class="store-info">
+                                <img src="https://via.placeholder.com/60x60/FF9800/FFFFFF?text=C" 
+                                     alt="Mercado C" 
+                                     class="store-logo">
+                                <div class="store-details">
+                                    <h4>Atacadão do Bairro C</h4>
+                                    <div class="store-distance">📍 3.8 km • Entrega em 2 dias</div>
+                                    <div class="store-stock low">⚠ Estoque baixo (8 unidades)</div>
+                                </div>
+                            </div>
+                            <div class="store-pricing">
+                                <div class="current-price">R$ 25,90</div>
+                                <div class="unit-price">R$ 5,18/kg</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions">
+                    <div class="quantity-selector">
+                        <button class="qty-btn" onclick="changeQuantity(-1)" aria-label="Diminuir quantidade">−</button>
+                        <input type="number" class="qty-input" id="quantity" value="1" min="1" max="99" readonly>
+                        <button class="qty-btn" onclick="changeQuantity(1)" aria-label="Aumentar quantidade">+</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="addToCart()">
+                        🛒 Adicionar ao Carrinho
+                    </button>
+                    <button class="btn btn-secondary" onclick="addToList()">
+                        📋 Adicionar à Lista
+                    </button>
+                    <button class="share-btn" onclick="shareProduct()" aria-label="Compartilhar produto">
+                        🔗
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabs Section -->
+        <section class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('description')">📝 Descrição</button>
+                <button class="tab" onclick="showTab('nutrition')">🥗 Informações Nutricionais</button>
+                <button class="tab" onclick="showTab('ingredients')">🌾 Ingredientes</button>
+                <button class="tab" onclick="showTab('specifications')">📊 Especificações</button>
+            </div>
+
+            <!-- Description Tab -->
+            <div id="description" class="tab-content active">
+                <h3>Sobre o Produto</h3>
+                <p>Arroz integral de alta qualidade, tipo 1, ideal para uma alimentação saudável e equilibrada. Rico em fibras, vitaminas do complexo B e minerais essenciais como magnésio, fósforo e potássio.</p>
+                <p>O arroz integral passa por menos processamento que o arroz branco, mantendo a película e o germe do grão, preservando assim seus nutrientes naturais. Perfeito para quem busca uma dieta mais nutritiva sem abrir mão do sabor.</p>
+                <h4 style="margin-top: 1.5rem;">Benefícios:</h4>
+                <ul style="margin-left: 1.5rem; line-height: 2;">
+                    <li>✓ Rico em fibras - auxilia no funcionamento intestinal</li>
+                    <li>✓ Baixo índice glicêmico - ideal para diabéticos</li>
+                    <li>✓ Fonte de vitaminas do complexo B</li>
+                    <li>✓ Contém minerais essenciais</li>
+                    <li>✓ Sem glúten naturalmente</li>
+                    <li>✓ Grãos longos e uniformes</li>
+                </ul>
+            </div>
+
+            <!-- Nutrition Tab -->
+            <div id="nutrition" class="tab-content">
+                <h3>Informação Nutricional</h3>
+                <p style="margin-bottom: 1rem;">Porção de 50g (1/4 xícara de arroz cru)</p>
+                <table class="nutrition-table">
+                    <thead>
+                        <tr>
+                            <th>Nutriente</th>
+                            <th class="value">Por Porção (50g)</th>
+                            <th class="value">% VD*</th>
+                            <th class="value">Por 100g</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Valor Energético</td>
+                            <td class="value">175 kcal</td>
+                            <td class="value">9%</td>
+                            <td class="value">350 kcal</td>
+                        </tr>
+                        <tr>
+                            <td>Carboidratos</td>
+                            <td class="value">37g</td>
+                            <td class="value">12%</td>
+                            <td class="value">74g</td>
+                        </tr>
+                        <tr>
+                            <td>Proteínas</td>
+                            <td class="value">4,0g</td>
+                            <td class="value">5%</td>
+                            <td class="value">8,0g</td>
+                        </tr>
+                        <tr>
+                            <td>Gorduras Totais</td>
+                            <td class="value">1,5g</td>
+                            <td class="value">3%</td>
+                            <td class="value">3,0g</td>
+                        </tr>
+                        <tr>
+                            <td>Gorduras Saturadas</td>
+                            <td class="value">0,5g</td>
+                            <td class="value">2%</td>
+                            <td class="value">1,0g</td>
+                        </tr>
+                        <tr>
+                            <td>Gorduras Trans</td>
+                            <td class="value">0g</td>
+                            <td class="value">-</td>
+                            <td class="value">0g</td>
+                        </tr>
+                        <tr>
+                            <td>Fibra Alimentar</td>
+                            <td class="value">2,5g</td>
+                            <td class="value">10%</td>
+                            <td class="value">5,0g</td>
+                        </tr>
+                        <tr>
+                            <td>Sódio</td>
+                            <td class="value">0mg</td>
+                            <td class="value">0%</td>
+                            <td class="value">0mg</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--gray-700);">
+                    * Valores Diários de referência com base em uma dieta de 2.000 kcal ou 8.400 kJ. 
+                    Seus valores diários podem ser maiores ou menores dependendo de suas necessidades energéticas.
+                </p>
+            </div>
+
+            <!-- Ingredients Tab -->
+            <div id="ingredients" class="tab-content">
+                <h3>Lista de Ingredientes</h3>
+                <div class="ingredients-list">
+                    <p><strong>Ingredientes:</strong> Arroz integral tipo 1.</p>
+                    <p style="margin-top: 1rem;"><strong>Alérgicos:</strong> Não contém glúten.</p>
+                    <p style="margin-top: 1rem;"><strong>Observações:</strong> Produto naturalmente isento de glúten. 
+                    Pode conter traços de soja e amendoim devido ao processamento em equipamentos compartilhados.</p>
+                </div>
+            </div>
+
+            <!-- Specifications Tab -->
+            <div id="specifications" class="tab-content">
+                <h3>Especificações Técnicas</h3>
+                <table class="nutrition-table">
+                    <tbody>
+                        <tr>
+                            <td><strong>Marca</strong></td>
+                            <td>Marca Premium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fabricante</strong></td>
+                            <td>Alimentos Premium S/A</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tipo</strong></td>
+                            <td>Arroz Integral Tipo 1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Peso Líquido</strong></td>
+                            <td>5 kg</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Peso Bruto</strong></td>
+                            <td>5,1 kg</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EAN/GTIN</strong></td>
+                            <td>7891234567890</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NCM</strong></td>
+                            <td>1006.30.29</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Embalagem</strong></td>
+                            <td>Pacote plástico flexível</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dimensões (CxLxA)</strong></td>
+                            <td>35 x 22 x 8 cm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validade</strong></td>
+                            <td>12 meses a partir da data de fabricação</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Condições de Armazenamento</strong></td>
+                            <td>Local seco, fresco e arejado</td>
+                        </tr>
+                        <tr>
+                            <td><strong>País de Origem</strong></td>
+                            <td>Brasil</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Registro MS</strong></td>
+                            <td>MS 1234567890123</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Equivalents Section -->
+        <section class="equivalents-section">
+            <h2>🔄 Produtos Similares e Equivalentes</h2>
+            <p style="color: var(--gray-700); margin-bottom: 1.5rem;">
+                Compare com outros produtos similares que podem atender suas necessidades
+            </p>
+            
+            <div class="equivalents-grid">
+                <!-- Equivalent 1 - Cheaper -->
+                <div class="equivalent-card" onclick="window.location.href='produto.html?id=2'">
+                    <img src="https://via.placeholder.com/200x200/E6F5E6/006633?text=Arroz+B" 
+                         alt="Arroz Integral B" 
+                         class="equivalent-image">
+                    <div class="equivalent-info">
+                        <div class="equivalent-brand">Marca Econômica B</div>
+                        <h4>Arroz Integral Tipo 1</h4>
+                        <p style="font-size: 0.85rem; color: var(--gray-700);">5 kg • R$ 4,20/kg</p>
+                        <div class="price-comparison">
+                            <div class="equivalent-price">R$ 21,00</div>
+                            <div class="price-diff cheaper">−8% mais barato</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equivalent 2 - Same brand, different size -->
+                <div class="equivalent-card" onclick="window.location.href='produto.html?id=3'">
+                    <img src="https://via.placeholder.com/200x200/E6F2FF/003366?text=Arroz+A+1kg" 
+                         alt="Arroz Integral 1kg" 
+                         class="equivalent-image">
+                    <div class="equivalent-info">
+                        <div class="equivalent-brand">Marca Premium</div>
+                        <h4>Arroz Integral Tipo 1</h4>
+                        <p style="font-size: 0.85rem; color: var(--gray-700);">1 kg • R$ 5,90/kg</p>
+                        <div class="price-comparison">
+                            <div class="equivalent-price">R$ 5,90</div>
+                            <div class="price-diff more-expensive">+29% por kg</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equivalent 3 - Organic -->
+                <div class="equivalent-card" onclick="window.location.href='produto.html?id=4'">
+                    <img src="https://via.placeholder.com/200x200/E8F5E9/2E7D32?text=Org%C3%A2nico" 
+                         alt="Arroz Integral Orgânico" 
+                         class="equivalent-image">
+                    <div class="equivalent-info">
+                        <div class="equivalent-brand">Marca Orgânica C</div>
+                        <h4>Arroz Integral Orgânico</h4>
+                        <p style="font-size: 0.85rem; color: var(--gray-700);">
+                            5 kg • R$ 6,40/kg • 🌱 Certificado Orgânico
+                        </p>
+                        <div class="price-comparison">
+                            <div class="equivalent-price">R$ 32,00</div>
+                            <div class="price-diff more-expensive">+40% premium</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equivalent 4 - Different brand -->
+                <div class="equivalent-card" onclick="window.location.href='produto.html?id=5'">
+                    <img src="https://via.placeholder.com/200x200/FFF3E0/F57C00?text=Arroz+D" 
+                         alt="Arroz Integral D" 
+                         class="equivalent-image">
+                    <div class="equivalent-info">
+                        <div class="equivalent-brand">Marca Tradicional D</div>
+                        <h4>Arroz Integral Parboilizado</h4>
+                        <p style="font-size: 0.85rem; color: var(--gray-700);">5 kg • R$ 4,70/kg</p>
+                        <div class="price-comparison">
+                            <div class="equivalent-price">R$ 23,50</div>
+                            <div class="price-diff more-expensive">+3% similar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="reviews-section">
+            <div class="reviews-header">
+                <h2>⭐ Avaliações dos Clientes</h2>
+                <div class="rating-summary">
+                    <div class="rating-number">4.7</div>
+                    <div class="rating-details">
+                        <div class="stars">★★★★★</div>
+                        <div class="review-count">Baseado em 324 avaliações</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 1 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">MC</div>
+                        <div>
+                            <strong>Maria Clara</strong>
+                            <div class="stars" style="font-size: 1rem;">★★★★★</div>
+                        </div>
+                    </div>
+                    <div class="review-date">15/10/2024</div>
+                </div>
+                <div class="review-text">
+                    Excelente arroz integral! Os grãos são uniformes e soltinhos após o cozimento. 
+                    Muito melhor que outras marcas que já experimentei. A embalagem de 5kg é perfeita 
+                    para minha família. Recomendo!
+                </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">JS</div>
+                        <div>
+                            <strong>João Silva</strong>
+                            <div class="stars" style="font-size: 1rem;">★★★★☆</div>
+                        </div>
+                    </div>
+                    <div class="review-date">10/10/2024</div>
+                </div>
+                <div class="review-text">
+                    Bom produto, mas achei o preço um pouco elevado comparado com outras marcas. 
+                    A qualidade é boa, os grãos são inteiros e o sabor é excelente. O tempo de 
+                    cozimento é razoável, cerca de 35-40 minutos.
+                </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">AP</div>
+                        <div>
+                            <strong>Ana Paula</strong>
+                            <div class="stars" style="font-size: 1rem;">★★★★★</div>
+                        </div>
+                    </div>
+                    <div class="review-date">05/10/2024</div>
+                </div>
+                <div class="review-text">
+                    Perfeito para quem busca uma alimentação mais saudável! Rico em fibras e 
+                    muito nutritivo. Minha família toda aprovou. A entrega foi rápida e o produto 
+                    chegou bem embalado. Comprarei novamente com certeza!
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // State
+        let selectedStore = 1;
+        let isFavorite = false;
+
+        // Change main image
+        function changeImage(thumbnail) {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.src = thumbnail.src.replace('80x80', '600x600');
+            
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        }
+
+        // Toggle favorite
+        function toggleFavorite() {
+            const btn = document.getElementById('favoriteBtn');
+            isFavorite = !isFavorite;
+            btn.textContent = isFavorite ? '♥' : '♡';
+            btn.classList.toggle('active', isFavorite);
+            
+            showToast(isFavorite ? 
+                '❤️ Adicionado aos favoritos!' : 
+                'Removido dos favoritos'
+            );
+        }
+
+        // Change quantity
+        function changeQuantity(delta) {
+            const input = document.getElementById('quantity');
+            let value = parseInt(input.value) + delta;
+            if (value < 1) value = 1;
+            if (value > 99) value = 99;
+            input.value = value;
+        }
+
+        // Select store
+        function selectStore(card, storeId) {
+            document.querySelectorAll('.store-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedStore = storeId;
+        }
+
+        // Add to cart
+        function addToCart() {
+            const quantity = document.getElementById('quantity').value;
+            const storeName = document.querySelector('.store-card.selected h4').textContent;
+            
+            // Add to cart in localStorage
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.push({
+                productId: 'arroz-integral-5kg',
+                quantity: parseInt(quantity),
+                storeId: selectedStore,
+                storeName: storeName
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update cart badge
+            updateCartBadge();
+            
+            // Show toast
+            showToast(`🛒 ${quantity}x adicionado ao carrinho da ${storeName}!`);
+            
+            // Telemetry
+            console.log('Adding to cart:', {
+                productId: 'arroz-integral-5kg',
+                quantity: quantity,
+                storeId: selectedStore
+            });
+        }
+
+        // Add to list
+        function addToList() {
+            const quantity = document.getElementById('quantity').value;
+            showToast(`📋 ${quantity}x adicionado à sua lista!`);
+            
+            // In a real app, this would make an API call
+            console.log('Adding to list:', {
+                productId: 'arroz-integral-5kg',
+                quantity: quantity
+            });
+        }
+
+        // Share product
+        function shareProduct() {
+            const productUrl = window.location.href;
+            const productName = 'Arroz Integral 5kg - Marca Premium';
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: productName,
+                    text: `Confira este produto no EconoFácil: ${productName}`,
+                    url: productUrl
+                }).then(() => {
+                    showToast('🔗 Produto compartilhado!');
+                }).catch(() => {
+                    copyToClipboard(productUrl);
+                });
+            } else {
+                copyToClipboard(productUrl);
+            }
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('🔗 Link copiado para a área de transferência!');
+            });
+        }
+
+        // Show tab
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Product page loaded');
+            
+            // Check if product is in favorites (simulate)
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            if (favorites.includes('arroz-integral-5kg')) {
+                toggleFavorite();
+            }
+
+            // Initialize cart badge
+            updateCartBadge();
+        });
+
+        // Update cart badge
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartBadge = document.getElementById('cartBadge');
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Telemetry - Track page view
+        console.log('Telemetry: product_viewed', {
+            product_id: 'arroz-integral-5kg',
+            timestamp: new Date().toISOString(),
+            user_id: 'usr_001'
+        });
+    </script>
+</body>
+</html>
