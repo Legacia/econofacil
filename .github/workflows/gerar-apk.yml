@@ -1,0 +1,41 @@
+name: Gerar APK do EconoFácil
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Instalar dependências
+        run: npm install
+      - name: Criar o projeto Android
+        run: npx cap add android
+      - name: Gerar os ícones do app
+        run: npx capacitor-assets generate --android || echo "Usando o ícone padrão."
+      - name: Permitir conexão http (rede local)
+        run: sed -i 's/<application/<application android:usesCleartextTraffic="true"/' android/app/src/main/AndroidManifest.xml
+      - name: Sincronizar
+        run: npx cap sync android
+      - name: Compilar o APK
+        working-directory: android-app/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+      - name: Guardar o APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: EconoFacil-apk
+          path: android-app/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

@@ -1,0 +1,97 @@
+==============================================================
+  EconoFácil — Como gerar o APK para Android
+==============================================================
+
+O QUE É O APK
+  É o "instalador" do app para o Android. Ele funciona como uma
+  casca: ao abrir, pede o endereço do EconoFácil que está rodando
+  no seu computador e mostra o app em tela cheia.
+
+  IMPORTANTE: o "cérebro" do EconoFácil (preços, Noor, pedidos)
+  roda no COMPUTADOR. Para usar o app no celular:
+    - o computador precisa estar LIGADO, com o EconoFácil aberto
+      no modo celular (arquivo "...INICIAR-CELULAR");
+    - o celular precisa estar no MESMO Wi-Fi do computador.
+
+  Este APK é de TESTE/uso pessoal (assinatura de depuração).
+  Não serve para publicar na Google Play.
+
+--------------------------------------------------------------
+CAMINHO FÁCIL: o GitHub compila o APK para você (grátis)
+--------------------------------------------------------------
+Você não precisa instalar nada no computador.
+
+1) Crie uma conta grátis em https://github.com (se não tiver).
+
+2) Clique no "+" (canto superior direito) > "New repository".
+   Nome: econofacil-android. Pode deixar "Private". Clique em
+   "Create repository".
+
+3) Na página do repositório, clique em "uploading an existing
+   file". Abra a pasta deste projeto e ARRASTE TODO o conteúdo
+   dela (as pastas "www" e "assets" e os arquivos .json) para a
+   página. Clique em "Commit changes".
+
+   >>> A pasta oculta ".github" (que contém a receita do APK)
+   pode não subir no arraste. Por isso, faça também o passo 4.
+
+4) Ainda no repositório: "Add file" > "Create new file".
+   - No campo do nome digite exatamente:
+         .github/workflows/build-apk.yml
+     (ao digitar as barras, o GitHub cria as pastas sozinho)
+   - Abra o arquivo "ARQUIVO-DO-GITHUB-build-apk.yml.txt" deste
+     projeto, copie TODO o texto e cole na caixa grande.
+   - Clique em "Commit changes".
+
+5) Clique na aba "Actions". Se pedir, clique em "I understand my
+   workflows, go ahead and enable them".
+   Clique em "Gerar APK do EconoFácil" (menu da esquerda) > botão
+   "Run workflow" > "Run workflow".
+   (Ele também roda sozinho a cada envio de arquivos.)
+
+6) Aguarde de 5 a 10 minutos até aparecer um ✓ verde.
+   Clique no nome da execução. Lá embaixo, em "Artifacts", clique
+   em "EconoFacil-apk" para baixar um ZIP. Extraia: dentro está o
+   arquivo  app-debug.apk .
+
+   Se aparecer um ✗ vermelho: clique na execução, abra o passo que
+   falhou e me envie o texto do erro que eu corrijo.
+
+7) Passe o app-debug.apk para o celular (cabo USB, Google Drive,
+   WhatsApp para você mesmo...). Toque nele para instalar.
+   O Android vai pedir para "permitir instalar apps desta fonte":
+   permita só para esse arquivo/aplicativo (é normal).
+
+--------------------------------------------------------------
+USAR O APP NO CELULAR
+--------------------------------------------------------------
+1) No COMPUTADOR, dê dois cliques em:
+     Windows-INICIAR-CELULAR.bat  (Mac: Mac-INICIAR-CELULAR.command)
+   Na janela preta aparece um endereço assim:
+     http://192.168.0.12:8000
+   (Se o Windows perguntar sobre o Firewall: "Permitir acesso",
+   só em rede PRIVADA/de casa.)
+
+2) No CELULAR, abra o app EconoFácil e digite o endereço (só
+   "192.168.0.12:8000" já basta). Toque em "Conectar".
+   Das próximas vezes ele conecta sozinho. Se o endereço do
+   computador mudar, toque em "voltar" no celular para trocá-lo.
+
+--------------------------------------------------------------
+ALTERNATIVA: compilar no próprio computador (Android Studio)
+--------------------------------------------------------------
+  1. Instale o Node.js 20 e o Android Studio.
+  2. Nesta pasta:  npm install
+                   npx cap add android
+                   npx capacitor-assets generate --android
+  3. Em android/app/src/main/AndroidManifest.xml, na linha
+     "<application", acrescente:  android:usesCleartextTraffic="true"
+  4. npx cap sync android  e depois  npx cap open android
+  5. No Android Studio: Build > Build Bundle(s)/APK(s) > Build APK(s).
+
+--------------------------------------------------------------
+SEM APK (mais simples): pelo Chrome do celular
+--------------------------------------------------------------
+  Com o EconoFácil aberto no modo celular, abra o endereço no
+  Chrome do celular, toque nos 3 pontinhos > "Adicionar à tela
+  inicial". Cria um atalho com o ícone do EconoFácil.

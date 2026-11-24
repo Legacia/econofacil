@@ -1,0 +1,164 @@
+==============================================================
+  EconoFácil — Versão para rodar no seu computador
+==============================================================
+
+O QUE É
+  Um app de compras de supermercado que compara preços entre
+  lojas e monta a cesta mais barata (a IA "Noor" divide a compra
+  entre lojas quando vale a pena). Tudo roda no SEU computador,
+  sem precisar de internet depois de instalado. Nenhum dado sai
+  da sua máquina.
+
+O QUE VOCÊ PRECISA
+  - Windows 10/11, Mac ou Linux
+  - Python 3.12 (o instalador te ajuda se não tiver)
+  - Internet SÓ durante a instalação (para baixar componentes)
+  - Uns 300 MB livres
+
+--------------------------------------------------------------
+INSTALAR (só uma vez)
+--------------------------------------------------------------
+IMPORTANTE: primeiro EXTRAIA o ZIP (botão direito > "Extrair
+tudo"). Não rode de dentro do ZIP.
+
+WINDOWS
+  1. Dê dois cliques em  Windows-INSTALAR.bat
+  2. Se o Windows avisar "Windows protegeu seu computador":
+     clique em "Mais informações" > "Executar assim mesmo".
+  3. Se faltar o Python, o instalador oferece instalar sozinho
+     (digite S). Depois, feche e abra o instalador de novo.
+  4. Aguarde até aparecer "INSTALAÇÃO CONCLUÍDA COM SUCESSO!"
+     (1 a 3 minutos). Um atalho "EconoFacil" aparece na sua
+     área de trabalho.
+
+MAC
+  1. Instale o Python 3.12 em python.org/downloads/macos
+     (se ainda não tiver).
+  2. Clique com o BOTÃO DIREITO em  Mac-INSTALAR.command
+     > "Abrir" > "Abrir". (Só na primeira vez; é um aviso
+     normal do Mac para arquivos baixados.)
+
+LINUX
+  1. Abra o terminal na pasta e rode:  ./Linux-instalar.sh
+     (se faltar: sudo apt install python3 python3-venv)
+
+--------------------------------------------------------------
+USAR
+--------------------------------------------------------------
+  Windows: dois cliques em Windows-INICIAR.bat (ou no atalho)
+  Mac:     Mac-INICIAR.command  (botão direito > Abrir)
+  Linux:   ./Linux-iniciar.sh
+
+  Uma janela preta abre e, em seguida, o navegador mostra o
+  EconoFácil (endereço http://localhost:8000).
+  MANTENHA A JANELA PRETA ABERTA enquanto usa.
+  Para ENCERRAR: feche a janela preta.
+
+--------------------------------------------------------------
+COMO TESTAR TUDO (roteiro de 10 minutos)
+--------------------------------------------------------------
+  Na tela de login aparecem botões "Cliente", "Lojista" e
+  "Admin" (modo demonstração): toque num deles e em "Entrar".
+
+  CONTAS DE TESTE
+    Cliente : demo@econofacil.com      senha: demo12345
+              (já tem histórico de compras)
+    Lojista : lojista1@econofacil.com  senha: lojista123
+              (lojista2 e lojista3 = as outras duas lojas)
+    Admin   : admin@econofacil.com     senha: admin12345
+    Ou crie sua própria conta em "Criar conta".
+
+  1) COMO CLIENTE
+     - Na página inicial veja "Você costuma comprar" (Noor).
+     - Abra um produto: compare as lojas e veja "Quem comprou
+       este também comprou".
+     - Em "Receitas", abra uma receita, mude o nº de porções e
+       adicione os ingredientes ao carrinho.
+     - Em "Listas", crie uma lista, adicione produtos e toque em
+       "Comparar a lista inteira".
+     - No carrinho, a Noor sugere dividir a compra entre lojas
+       (split). Vá ao checkout e escolha PIX.
+     - Cada loja tem o SEU QR Code PIX. Como é demonstração,
+       toque em "Simular pagamento" em cada loja (nenhum
+       dinheiro real é movimentado).
+
+  2) COMO LOJISTA (abra outra janela anônima do navegador)
+     - Entre como lojista, aba "Pedidos": clique em "Iniciar
+       separação", "Despachar" e "Marcar entregue".
+     - Cada loja avança só a sua parte. O pedido do cliente
+       segue a loja MAIS LENTA.
+     - Outras abas: estoque e preços, promoções, relatório e a
+       chave PIX própria da loja.
+
+  3) VOLTE AO CLIENTE: em "Pedidos" veja o andamento de cada loja.
+
+  4) COMO ADMIN: o painel mostra o agendador de expirações
+     (carrinhos, promoções e PIX vencidos) e o Noor Monitor.
+
+  Esqueci a senha: informe o e-mail; no modo demonstração o
+  app já abre a tela para criar a nova senha (não há envio de
+  e-mail de verdade).
+
+--------------------------------------------------------------
+USAR NO CELULAR (Android)
+--------------------------------------------------------------
+  O EconoFácil roda no computador; o celular acessa pelo Wi-Fi.
+
+  1) No computador, abra pelo atalho "INICIAR-CELULAR":
+       Windows-INICIAR-CELULAR.bat | Mac-INICIAR-CELULAR.command
+       | Linux-iniciar-celular.sh
+     A janela mostra o endereço para o celular, por exemplo
+       http://192.168.0.12:8000
+     (Se o Windows perguntar sobre o Firewall: "Permitir acesso",
+     somente em rede PRIVADA/de casa.)
+
+  2) No celular (MESMO Wi-Fi), abra o endereço no Chrome.
+     Para criar um atalho: menu ⋮ > "Adicionar à tela inicial".
+
+  3) Quer um APK (app instalável)? Veja a pasta "android-app":
+     o arquivo COMO-GERAR-O-APK.txt explica, passo a passo, como
+     o GitHub compila o APK para você, sem instalar nada.
+
+  ATENÇÃO: no modo celular, qualquer pessoa na sua rede consegue
+  abrir o app (as contas de teste têm senha conhecida). Use só
+  em rede de confiança, como a de casa.
+
+--------------------------------------------------------------
+PROBLEMAS COMUNS
+--------------------------------------------------------------
+  "Python não encontrado"  -> instale o Python 3.12 e rode o
+      instalador de novo (no Windows, marque "Add python.exe
+      to PATH").
+  Falha ao baixar componentes -> confira a internet e rode o
+      instalador de novo (pode rodar quantas vezes precisar).
+  A página não abre sozinha -> abra o navegador e digite
+      http://localhost:8000 (a porta aparece na janela preta;
+      se a 8000 estiver ocupada, usa 8001, 8002...).
+  Quer zerar os dados -> feche o app, apague a pasta "data" e
+      abra de novo (os produtos de exemplo voltam).
+  Qualquer outro erro -> mande a pasta "logs" para quem te
+      enviou este pacote.
+
+--------------------------------------------------------------
+SOBRE ESTA VERSÃO
+--------------------------------------------------------------
+  - É uma versão de DEMONSTRAÇÃO local: o PIX é simulado, o
+    banco é um arquivo local (SQLite, pasta "data"), as contas
+    de teste têm senha fixa e o limite de tentativas de login
+    fica desligado. NÃO use para vendas reais nem exponha
+    à internet.
+  - O app só aceita conexões do próprio computador (127.0.0.1).
+  - Os dados (contas, pedidos) ficam salvos na pasta "data".
+  - Se você já tinha instalado uma versão anterior, o instalador
+    guarda o banco antigo em "data" (com a data no nome) e cria
+    um novo, porque a estrutura mudou.
+  - Ainda NÃO existe: EconoClub (pontos/cashback), pagamento por
+    cartão, PSP de PIX real e envio de e-mail.
+
+PARA DESENVOLVEDORES
+  backend/       API FastAPI (testes: pip install pytest
+                 pytest-asyncio httpx; depois  pytest)
+  static/        site já compilado
+  frontend/  código-fonte do site (React + Vite)
+  tools/         instalador e iniciador (Python)
+  android-app/   projeto Android (Capacitor) + guia do APK

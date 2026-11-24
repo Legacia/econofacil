@@ -1,0 +1,11 @@
+.venv/
+data/
+logs/
+backend/.env
+*.db
+__pycache__/
+.pytest_cache/
+node_modules/
+frontend/dist/
+android-app/android/
+.DS_Store
