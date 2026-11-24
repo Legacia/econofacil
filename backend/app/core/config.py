@@ -1,8 +1,10 @@
 """Configuração central da aplicação, carregada de variáveis de ambiente."""
 from functools import lru_cache
 
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_DEFAULT_SECRETS = {"dev-secret-change-me", "dev-pix-webhook-secret"}
 
 
 class Settings(BaseSettings):
@@ -50,6 +52,25 @@ class Settings(BaseSettings):
 
     # LGPD
     TERMS_VERSION: str = "2025.1"
+
+    @model_validator(mode="after")
+    def _reject_default_secrets(self):
+        """Fora do modo demonstração (e dos testes), recusa iniciar com segredos padrão."""
+        if self.LOCAL_DEMO or self.ENVIRONMENT == "test":
+            return self
+        padrao = [
+            nome for nome, valor in (
+                ("SECRET_KEY", self.SECRET_KEY),
+                ("PIX_WEBHOOK_SECRET", self.PIX_WEBHOOK_SECRET),
+            ) if valor in _DEFAULT_SECRETS
+        ]
+        if padrao:
+            raise ValueError(
+                f"{', '.join(padrao)} está com o valor padrão. Defina valores próprios no .env "
+                "(gere com: python -c \"import secrets; print(secrets.token_urlsafe(64))\") "
+                "ou use LOCAL_DEMO=true apenas para demonstração local."
+            )
+        return self
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod

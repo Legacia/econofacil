@@ -9,3 +9,11 @@ node_modules/
 frontend/dist/
 android-app/android/
 .DS_Store
+
+# Chaves e segredos (nunca versionar)
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+backups/
