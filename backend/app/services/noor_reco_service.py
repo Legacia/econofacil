@@ -14,6 +14,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.cart import Cart, CartStatus
+from app.models.catalog import Product
 from app.models.order import Order, OrderItem, OrderStatus
 from app.models.user import User
 from app.services import pricing
@@ -46,9 +47,10 @@ async def also_bought(db: AsyncSession, product_id: uuid.UUID, limit: int = 5) -
     count = func.count(func.distinct(OrderItem.order_id))
     rows = (await db.execute(
         select(OrderItem.product_id, count)
+        .join(Product, Product.id == OrderItem.product_id)
         .where(OrderItem.order_id.in_(with_product), OrderItem.product_id != product_id)
-        .group_by(OrderItem.product_id)
-        .order_by(count.desc(), OrderItem.product_id)
+        .group_by(OrderItem.product_id, Product.name)
+        .order_by(count.desc(), Product.name, OrderItem.product_id)  # desempate estável
         .limit(limit * 3)  # folga para descartar itens sem oferta
     )).all()
     items = await _decorate(
